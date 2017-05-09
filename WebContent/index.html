@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- META -->
+	<title>Projekt WaKobA</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content="" />
+	
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="css/kickstart.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="style.css" media="all" /> 
+	
+	<!-- Javascript -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/kickstart.js"></script>
+</head>
+<body>
+<div class="grid">
+	<header>
+		<h4> Projekt WaKobA</h4>
+	</header>
+	
+	<section>
+		<!-- Tabs Left -->
+		<ul class="tabs left">
+		<li><a href="#new">Neue Analyse</a></li>
+		<li><a href="#last">Letzte Auswertungen</a></li>
+		</ul>
+
+		<div id="new" class="tab-content">
+			<form action="DataServlet" method="POST" enctype="multipart/form-data">
+				
+			<!-- Ordered List -->
+			<ol>
+			<li>
+				<p>Datensatz auswählen</p>
+				<input id="file1" class="file" type="file" name="file">
+			</li>
+			<li>
+				<p>Art der Analyse / den Algorithmus auswählen</p>
+				<p>
+				<!-- Radio -->
+				<input type="radio" name="k-means" id="radio1" />
+				<label for="radio1" class="inline">K-Means-Algorithmus</label>
+				</p><p>
+				<input type="radio" name="diana" id="radio2" />
+				<label for="radio1" class="inline">DIANA</label>
+				</p><p>
+				<input type="radio" name="dbscan" id="radio3" />
+				<label for="radio3" class="inline">DBSCAN</label>
+				</p>
+			</li>
+			<li>
+				<!-- Text Field -->
+				<p>Wie viele Cluster sollen gebildet werden?</p>
+				<input id="text1" type="text" name="anzahl"/>
+			</li>
+			
+			</ol>
+			
+			<p>
+					<button type="reset" value="Reset">Zurücksetzen</button>
+					<button type="submit" value="Submit">Analyse Starten</button>
+			</p>
+				</form>
+		</div>
+		<div id="last" class="tab-content">
+			<h6>Bitte wählen Sie die gewünschte Auswertung:</h6>
+			</br>
+			<!-- Ordered List -->
+			<ol>
+			<li>XY-Analyse vom DD.MM.YYYY</li>
+			<li>XY-Analyse vom DD.MM.YYYY</li>
+			<li>XY-Analyse vom DD.MM.YYYY</li>
+			<li>XY-Analyse vom DD.MM.YYYY</li>
+			<li>XY-Analyse vom DD.MM.YYYY</li>
+			</ol>
+		</div>
+		<!-- Tabs Left End -->
+
+	</section>
+	<footer>
+		<p align="center">
+			Entwickelt von V-Men Software für KaufDort
+		</p>
+		<p align="center">
+			<img src="images/KaufDort_V1.png" width="150" height="150" />
+			<img src="images/V-Men_V1.png" width="150" height="150" />
+		</p>
+	</footer>
+</div> <!-- End Grid -->
+
+</body>
+</html>
