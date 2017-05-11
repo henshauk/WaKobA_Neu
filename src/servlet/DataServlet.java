@@ -54,9 +54,8 @@ public class DataServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String algorithmus="";
-		int anzahl=0;
-
+		String algorithmus = "";
+		int anzahlCluster = 0;
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 
@@ -104,31 +103,46 @@ public class DataServlet extends HttpServlet {
 
 						}
 						if (name.equals("anzahl")) {
-							anzahl= Integer.parseInt(item.getString());
-							System.out.println("anzahl: " + anzahl);
+							anzahlCluster= Integer.parseInt(item.getString());
+							System.out.println("anzahl: " + anzahlCluster);
 						}
 						if (name.equals("kategorie")) {
 
 						}
 					}
 
-//					System.out.println("input " + item.getFieldName());
+					// System.out.println("input " + item.getFieldName());
 
-					int anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
+
+					anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
 					 Wekabuilder wb = new Wekabuilder(filePath);
 
-					/*
-					 * String auswahl = request.getParameter("radio");
-					 * switch(auswahl){ case "a": try {
-					 * wb.buildSKM(anzahlCluster); } catch (Exception e) { //
-					 * TODO Auto-generated catch block e.printStackTrace(); }
-					 * break; case "b": try { wb.buildFF(anzahlCluster); } catch
-					 * (Exception e) { // TODO Auto-generated catch block
-					 * e.printStackTrace(); } break; case "c": try {
-					 * wb.buildEM(anzahlCluster); } catch (Exception e) { //
-					 * TODO Auto-generated catch block e.printStackTrace(); }
-					 * break; }
-					 */
+				
+
+
+					switch (algorithmus) {
+					case "a":
+						try {
+							wb.buildSKM(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						break;
+					case "b":
+						try {
+							wb.buildFF(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						break;
+					case "c":
+						try {
+							wb.buildEM(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						break;
+					}
 
 				}
 			} catch (FileUploadException e) {
