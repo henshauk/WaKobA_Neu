@@ -115,7 +115,7 @@ public class DataServlet extends HttpServlet {
 //					System.out.println("input " + item.getFieldName());
 
 					int anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
-					// Wekabuilder wb = new Wekabuilder(filePath);
+					 Wekabuilder wb = new Wekabuilder(filePath);
 
 					/*
 					 * String auswahl = request.getParameter("radio");
