@@ -1,6 +1,8 @@
 package data;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import weka.clusterers.Clusterer;
@@ -37,10 +39,15 @@ public class Wekabuilder {
 
 		String arffDat = path + ".arff";
 		// und als ARFF-Datei speichern
-		saver = new ArffSaver();
+		/*saver = new ArffSaver();
 		saver.setInstances(data);
 		saver.setFile(new File(arffDat));
 		saver.writeBatch();
+		*/
+		BufferedWriter writer = new BufferedWriter(new FileWriter(arffDat));
+	    writer.write(data.toString());
+	    writer.flush();
+	    writer.close();
 
 		// Cluster Simple KMeans
 		source = new DataSource(arffDat);
