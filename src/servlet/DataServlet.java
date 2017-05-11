@@ -21,7 +21,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import data.Wekabuilder;
 
-
 /**
  * Servlet implementation class DataServlet
  */
@@ -44,8 +43,7 @@ public class DataServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-			
-		
+
 		response.sendRedirect("auswertung.html");
 	}
 
@@ -56,6 +54,9 @@ public class DataServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String algorithmus="";
+		int anzahl=0;
+
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 
@@ -69,67 +70,66 @@ public class DataServlet extends HttpServlet {
 			String path = repository.getAbsolutePath();
 			// Create a new file upload handler
 			ServletFileUpload upload = new ServletFileUpload(factory);
+			String filePath = null;
 
 			// Parse the request
 			try {
 				List<FileItem> items = upload.parseRequest(request);
-
 				Iterator<FileItem> iter = items.iterator();
 				while (iter.hasNext()) {
 					FileItem item = iter.next();
 
 					if (!item.isFormField()) {
-						String fileName = item.getName();
-						long sizeInBytes = item.getSize();
-						System.out.println(fileName + " size:" + sizeInBytes);
+						if (item.getSize() != 0) {
 
-						Date d = new Date();
-						SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
-						String filePath = path + File.separator + ft.format(d) + "__" + fileName;
-						File storeFile = new File(filePath);
-						System.out.println("Upload " + filePath);
+							String fileName = item.getName();
+							long sizeInBytes = item.getSize();
+							System.out.println(fileName + " size:" + sizeInBytes);
 
-						// saves the file on disk
-						item.write(storeFile);
+							Date d = new Date();
+							SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
+							filePath = path + File.separator + ft.format(d) + "__" + fileName;
+							File storeFile = new File(filePath);
+							System.out.println("Upload " + filePath);
 
-						if (item.isFormField()) {
-							String name = item.getFieldName();
-							String value = item.getString();
-
-							System.out.println(name + " " + value);
+							// saves the file on disk
+							item.write(storeFile);
 						}
-						if (item.getName() == "anzahl") {
-							System.out.println("anzahl: " + item.getString());
-						}
-						
-						int anzahlCluster = 3;//Integer.parseInt(request.getParameter("anzahl"));
-						Wekabuilder wb = new Wekabuilder(filePath);
-						
-		/*				String auswahl = request.getParameter("radio");
-						switch(auswahl){
-							case "a": try {
-									wb.buildSKM(anzahlCluster);
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} break;
-							case "b": 	try {
-									wb.buildFF(anzahlCluster);
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-										break;
-							case "c":	try {
-									wb.buildEM(anzahlCluster);
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-										break;
-							}
-*/
 					}
+					if (item.isFormField()) {
+						String name = item.getFieldName();
+						if (name.equals("radio")) {
+							algorithmus = item.getString();
+							System.out.println("algorithmus " + algorithmus);
+
+						}
+						if (name.equals("anzahl")) {
+							anzahl= Integer.parseInt(item.getString());
+							System.out.println("anzahl: " + anzahl);
+						}
+						if (name.equals("kategorie")) {
+
+						}
+					}
+
+//					System.out.println("input " + item.getFieldName());
+
+					int anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
+					// Wekabuilder wb = new Wekabuilder(filePath);
+
+					/*
+					 * String auswahl = request.getParameter("radio");
+					 * switch(auswahl){ case "a": try {
+					 * wb.buildSKM(anzahlCluster); } catch (Exception e) { //
+					 * TODO Auto-generated catch block e.printStackTrace(); }
+					 * break; case "b": try { wb.buildFF(anzahlCluster); } catch
+					 * (Exception e) { // TODO Auto-generated catch block
+					 * e.printStackTrace(); } break; case "c": try {
+					 * wb.buildEM(anzahlCluster); } catch (Exception e) { //
+					 * TODO Auto-generated catch block e.printStackTrace(); }
+					 * break; }
+					 */
+
 				}
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block
