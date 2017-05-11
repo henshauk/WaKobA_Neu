@@ -19,6 +19,9 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import data.Wekabuilder;
+
+
 /**
  * Servlet implementation class DataServlet
  */
@@ -41,7 +44,8 @@ public class DataServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+			
+		
 		response.sendRedirect("auswertung.html");
 	}
 
@@ -97,6 +101,33 @@ public class DataServlet extends HttpServlet {
 						if (item.getName() == "anzahl") {
 							System.out.println("anzahl: " + item.getString());
 						}
+						
+						int anzahlCluster = 3;//Integer.parseInt(request.getParameter("anzahl"));
+						Wekabuilder wb = new Wekabuilder(filePath);
+						
+						String auswahl = request.getParameter("radio");
+						switch(auswahl){
+							case "a": try {
+									wb.buildSKM(anzahlCluster);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} break;
+							case "b": 	try {
+									wb.buildFF(anzahlCluster);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+										break;
+							case "c":	try {
+									wb.buildEM(anzahlCluster);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+										break;
+							}
 
 					}
 				}
