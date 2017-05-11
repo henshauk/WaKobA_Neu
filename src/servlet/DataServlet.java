@@ -105,7 +105,7 @@ public class DataServlet extends HttpServlet {
 						int anzahlCluster = 3;//Integer.parseInt(request.getParameter("anzahl"));
 						Wekabuilder wb = new Wekabuilder(filePath);
 						
-						String auswahl = request.getParameter("radio");
+		/*				String auswahl = request.getParameter("radio");
 						switch(auswahl){
 							case "a": try {
 									wb.buildSKM(anzahlCluster);
@@ -128,7 +128,7 @@ public class DataServlet extends HttpServlet {
 								}
 										break;
 							}
-
+*/
 					}
 				}
 			} catch (FileUploadException e) {
