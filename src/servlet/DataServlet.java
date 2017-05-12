@@ -118,31 +118,27 @@ public class DataServlet extends HttpServlet {
 					 Wekabuilder wb = new Wekabuilder(filePath);
 
 				
-
-
-					switch (algorithmus) {
-					case "a":
-						try {
-							wb.buildSKM(anzahlCluster);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						break;
-					case "b":
-						try {
-							wb.buildFF(anzahlCluster);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						break;
-					case "c":
-						try {
-							wb.buildEM(anzahlCluster);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						break;
-					}
+					 if(algorithmus.equals("a")){
+						 try {
+								wb.buildSKM(anzahlCluster);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+					 }
+					 else if(algorithmus.equals("b")){
+						 try {
+								wb.buildFF(anzahlCluster);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+					 }
+					 else if(algorithmus.equals("c")){
+						 try {
+								wb.buildEM(anzahlCluster);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+					 }
 
 				}
 			} catch (FileUploadException e) {
