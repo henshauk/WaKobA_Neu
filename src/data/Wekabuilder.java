@@ -16,6 +16,8 @@ import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.experiment.DensityBasedClustererSplitEvaluator;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 public class Wekabuilder {
 
@@ -30,6 +32,7 @@ public class Wekabuilder {
 	CSVLoader loader;
 	ArffSaver saver;
 	DataSource source;
+	Instances trainingSubset;
 
 	public Wekabuilder(String path) throws Exception {
 		// CSV-Datei laden
@@ -53,30 +56,38 @@ public class Wekabuilder {
 		source = new DataSource(arffDat);
 
 		data = source.getDataSet();
+		
+		
 	}
 
-	public void getData(String path) throws Exception {
-
+	public void filter(int[] array) throws Exception {
+		int[] indicesOfColumnsToUse = array;
+		Remove remove = new Remove();
+		remove.setAttributeIndicesArray(indicesOfColumnsToUse);
+		remove.setInvertSelection(false);
+		remove.setInputFormat(data);
+		
+		trainingSubset = Filter.useFilter(data, remove);
 	}
 
 	public void buildSKM(int anzahl) throws Exception {
 		SimpleKMeans skm = new SimpleKMeans();
 		skm.setNumClusters(anzahl); // Anzahl der Cluster festlegen
-		skm.buildClusterer(data);
+		skm.buildClusterer(trainingSubset);
 		System.out.println(skm);
 	}
 
 	public void buildFF(int anzahl) throws Exception {
 		FarthestFirst ff = new FarthestFirst();
 		ff.setNumClusters(anzahl);
-		ff.buildClusterer(data);
+		ff.buildClusterer(trainingSubset);
 		System.out.println(ff);
 	}
 
 	public void buildEM(int anzahl) throws Exception {
 		EM em = new EM();
 		em.setNumClusters(anzahl);
-		em.buildClusterer(data);
+		em.buildClusterer(trainingSubset);
 		System.out.println(em);
 	}
 

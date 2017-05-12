@@ -116,7 +116,8 @@ public class DataServlet extends HttpServlet {
 
 					anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
 					 Wekabuilder wb = new Wekabuilder(filePath);
-
+					 int[] test = {};
+					 wb.filter(test);
 				
 					 if(algorithmus.equals("a")){
 						 try {
