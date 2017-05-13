@@ -6,24 +6,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javafx.scene.shape.Line;
 import weka.clusterers.Clusterer;
-import weka.clusterers.AbstractClusterer;
-import weka.clusterers.DensityBasedClusterer;
 import weka.clusterers.EM;
 import weka.clusterers.FarthestFirst;
 import weka.clusterers.SimpleKMeans;
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.experiment.DensityBasedClustererSplitEvaluator;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 
@@ -53,14 +46,13 @@ public class Wekabuilder {
 		String arffDat = path + ".arff";
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(arffDat));
-	    writer.write(data.toString());
-	    writer.flush();
-	    writer.close();
+		writer.write(data.toString());
+		writer.flush();
+		writer.close();
 
 		source = new DataSource(arffDat);
 		data = source.getDataSet();
-		
-		
+
 	}
 
 	public void filter(int[] array) throws Exception {
@@ -69,7 +61,7 @@ public class Wekabuilder {
 		remove.setAttributeIndicesArray(indicesOfColumnsToUse);
 		remove.setInvertSelection(false);
 		remove.setInputFormat(data);
-		
+
 		trainingSubset = Filter.useFilter(data, remove);
 		
 	}
