@@ -3,6 +3,8 @@ package servlet;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.lang.ArrayUtils;
 
 import data.Wekabuilder;
 
@@ -54,9 +57,9 @@ public class DataServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String algorithmus="";
-		int anzahl=0;
-
+		String algorithmus = "";
+		int anzahlCluster = 0;
+		List<Integer> kategorien = new ArrayList<Integer>();
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 
@@ -104,33 +107,50 @@ public class DataServlet extends HttpServlet {
 
 						}
 						if (name.equals("anzahl")) {
-							anzahl= Integer.parseInt(item.getString());
-							System.out.println("anzahl: " + anzahl);
+							anzahlCluster= Integer.parseInt(item.getString());
+							System.out.println("anzahl: " + anzahlCluster);
 						}
-						if (name.equals("kategorie")) {
-
+						if (name.equals("kategorie")) {						
+							kategorien.add(Integer.parseInt(item.getString()));		//add number if checkbox unchecked				
 						}
 					}
 
-//					System.out.println("input " + item.getFieldName());
+					// System.out.println("input " + item.getFieldName());
 
-					int anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
-					// Wekabuilder wb = new Wekabuilder(filePath);
 
-					/*
-					 * String auswahl = request.getParameter("radio");
-					 * switch(auswahl){ case "a": try {
-					 * wb.buildSKM(anzahlCluster); } catch (Exception e) { //
-					 * TODO Auto-generated catch block e.printStackTrace(); }
-					 * break; case "b": try { wb.buildFF(anzahlCluster); } catch
-					 * (Exception e) { // TODO Auto-generated catch block
-					 * e.printStackTrace(); } break; case "c": try {
-					 * wb.buildEM(anzahlCluster); } catch (Exception e) { //
-					 * TODO Auto-generated catch block e.printStackTrace(); }
-					 * break; }
-					 */
+					
+					 
 
 				}
+				
+				Wekabuilder wb = new Wekabuilder(filePath);
+				
+				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()]));
+				 System.out.println(Arrays.toString(kategorienArray));
+				 wb.filter(kategorienArray);
+			
+				 if(algorithmus.equals("a")){
+					 try {
+							wb.buildSKM(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				 }
+				 else if(algorithmus.equals("b")){
+					 try {
+							wb.buildFF(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				 }
+				 else if(algorithmus.equals("c")){
+					 try {
+							wb.buildEM(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				 }
+				
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block
 				System.err.println("parse Request failed");
