@@ -1,16 +1,24 @@
 package data;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javafx.scene.shape.Line;
 import weka.clusterers.Clusterer;
 import weka.clusterers.AbstractClusterer;
 import weka.clusterers.DensityBasedClusterer;
 import weka.clusterers.EM;
 import weka.clusterers.FarthestFirst;
 import weka.clusterers.SimpleKMeans;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
@@ -33,28 +41,23 @@ public class Wekabuilder {
 	ArffSaver saver;
 	DataSource source;
 	Instances trainingSubset;
+	String datapath="";
 
-	public Wekabuilder(String path) throws Exception {
+	public Wekabuilder(String path, String dataDir) throws Exception {
 		// CSV-Datei laden
+		this.datapath=dataDir;
 		loader = new CSVLoader();
 		loader.setSource(new File(path));
 		data = loader.getDataSet();
 
 		String arffDat = path + ".arff";
-		// und als ARFF-Datei speichern
-		/*saver = new ArffSaver();
-		saver.setInstances(data);
-		saver.setFile(new File(arffDat));
-		saver.writeBatch();
-		*/
+
 		BufferedWriter writer = new BufferedWriter(new FileWriter(arffDat));
 	    writer.write(data.toString());
 	    writer.flush();
 	    writer.close();
 
-		// Cluster Simple KMeans
 		source = new DataSource(arffDat);
-
 		data = source.getDataSet();
 		
 		
@@ -68,6 +71,46 @@ public class Wekabuilder {
 		remove.setInputFormat(data);
 		
 		trainingSubset = Filter.useFilter(data, remove);
+		
+	}
+	
+	public String storeData(Clusterer clusterer) throws IOException{
+	
+		Date d = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
+		String result = datapath + File.separator + "store";
+		
+		File storeDir = new File(result);
+		if (!storeDir.exists()) {
+			storeDir.mkdir();
+		}
+		
+		System.out.println("store "+storeDir.getAbsolutePath());
+		
+		String storedata = result + File.separator + ft.format(d);
+		BufferedWriter writer = new BufferedWriter(new FileWriter(storedata));
+	    writer.write(clusterer.toString());
+	    writer.flush();
+	    writer.close();
+
+	    return storedata;
+		
+	}
+	
+	public void getStoredData(String storeDir) throws IOException{
+		
+		StringBuilder sb = new StringBuilder();
+		
+	    String line="";
+	    BufferedReader reader = new BufferedReader(new FileReader(storeDir));
+	    while((line = reader.readLine()) !=null){
+	    	sb.append(line + "\n");
+			
+	    }
+	    reader.close();
+	    
+	    System.out.println("Datei inhalt:");
+		System.out.println(sb.toString());
 	}
 
 	public void buildSKM(int anzahl) throws Exception {
@@ -75,6 +118,8 @@ public class Wekabuilder {
 		skm.setNumClusters(anzahl); // Anzahl der Cluster festlegen
 		skm.buildClusterer(trainingSubset);
 		System.out.println(skm);
+		
+		getStoredData(storeData(skm));
 	}
 
 	public void buildFF(int anzahl) throws Exception {
@@ -89,44 +134,6 @@ public class Wekabuilder {
 		em.setNumClusters(anzahl);
 		em.buildClusterer(trainingSubset);
 		System.out.println(em);
-	}
-
-	public static void main(String[] args) throws Exception {
-		// Eigenen Dateipfad eintragen, nicht meinen nehmen ;-)
-		/*
-		 * String path =
-		 * "/home/Oj/Desktop/Informatik/Softwareprojektmanagement/Testdaten/";
-		 * 
-		 * String csvDatKlein = path + "SPM_TestdatensatzKlein_2017.csv"; String
-		 * csvDatMittel = path + "SPM_TestdatensatzMittel_2017.csv"; String
-		 * csvDatGross = path + "SPM_TestdatensatzGross_2017.csv";
-		 * 
-		 * String arffDat = path + "SPM_Testdatensatz.arff";
-		 * 
-		 * // CSV-Datei laden CSVLoader loader = new CSVLoader();
-		 * loader.setSource(new File(csvDatKlein)); Instances data =
-		 * loader.getDataSet();
-		 * 
-		 * // und als ARFF-Datei speichern ArffSaver saver = new ArffSaver();
-		 * saver.setInstances(data); saver.setFile(new File(arffDat));
-		 * saver.writeBatch();
-		 * 
-		 * // Cluster Simple KMeans DataSource source = new DataSource(arffDat);
-		 * 
-		 * data = source.getDataSet();
-		 * 
-		 * SimpleKMeans skm = new SimpleKMeans(); skm.setNumClusters(3); //
-		 * Anzahl der Cluster festlegen skm.buildClusterer(data);
-		 * System.out.println(skm);
-		 * 
-		 * 
-		 * FarthestFirst ff = new FarthestFirst(); ff.setNumClusters(3);
-		 * ff.buildClusterer(data); System.out.println(ff);
-		 * 
-		 * EM em = new EM(); em.setNumClusters(3); em.buildClusterer(data);
-		 * System.out.println(em);
-		 */
-
 	}
 
 }

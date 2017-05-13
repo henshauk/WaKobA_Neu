@@ -28,7 +28,7 @@ import data.Wekabuilder;
 public class DataServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String UPLOAD_DIRECTORY = "upload";
-
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -115,7 +115,7 @@ public class DataServlet extends HttpServlet {
 
 
 					anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
-					 Wekabuilder wb = new Wekabuilder(filePath);
+					 Wekabuilder wb = new Wekabuilder(filePath, path);
 					 int[] test = {};
 					 wb.filter(test);
 				
