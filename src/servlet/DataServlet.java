@@ -3,6 +3,8 @@ package servlet;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.lang.ArrayUtils;
 
 import data.Wekabuilder;
 
@@ -56,6 +59,7 @@ public class DataServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String algorithmus = "";
 		int anzahlCluster = 0;
+		List<Integer> kategorien = new ArrayList<Integer>();
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 
@@ -106,42 +110,47 @@ public class DataServlet extends HttpServlet {
 							anzahlCluster= Integer.parseInt(item.getString());
 							System.out.println("anzahl: " + anzahlCluster);
 						}
-						if (name.equals("kategorie")) {
-
+						if (name.equals("kategorie")) {						
+							kategorien.add(Integer.parseInt(item.getString()));		//add number if checkbox unchecked				
 						}
 					}
 
 					// System.out.println("input " + item.getFieldName());
 
 
-					anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
-					 Wekabuilder wb = new Wekabuilder(filePath);
-					 int[] test = {};
-					 wb.filter(test);
-				
-					 if(algorithmus.equals("a")){
-						 try {
-								wb.buildSKM(anzahlCluster);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-					 }
-					 else if(algorithmus.equals("b")){
-						 try {
-								wb.buildFF(anzahlCluster);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-					 }
-					 else if(algorithmus.equals("c")){
-						 try {
-								wb.buildEM(anzahlCluster);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-					 }
+					
+					 
 
 				}
+				
+				Wekabuilder wb = new Wekabuilder(filePath);
+				
+				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()]));
+				 System.out.println(Arrays.toString(kategorienArray));
+				 wb.filter(kategorienArray);
+			
+				 if(algorithmus.equals("a")){
+					 try {
+							wb.buildSKM(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				 }
+				 else if(algorithmus.equals("b")){
+					 try {
+							wb.buildFF(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				 }
+				 else if(algorithmus.equals("c")){
+					 try {
+							wb.buildEM(anzahlCluster);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+				 }
+				
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block
 				System.err.println("parse Request failed");

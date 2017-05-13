@@ -66,7 +66,7 @@ public class Wekabuilder {
 		int[] indicesOfColumnsToUse = array;
 		Remove remove = new Remove();
 		remove.setAttributeIndicesArray(indicesOfColumnsToUse);
-		remove.setInvertSelection(false);
+		remove.setInvertSelection(true);
 		remove.setInputFormat(data);
 
 		trainingSubset = Filter.useFilter(data, remove);
