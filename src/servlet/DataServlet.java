@@ -150,7 +150,7 @@ public class DataServlet extends HttpServlet {
 
 				}
 				
-				Wekabuilder wb = new Wekabuilder(filePath);
+				Wekabuilder wb = new Wekabuilder(filePath, path);
 				
 				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()]));
 				 System.out.println(Arrays.toString(kategorienArray));
