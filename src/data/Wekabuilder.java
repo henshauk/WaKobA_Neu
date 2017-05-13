@@ -2,8 +2,12 @@ package data;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import weka.clusterers.Clusterer;
 import weka.clusterers.AbstractClusterer;
@@ -42,22 +46,20 @@ public class Wekabuilder {
 
 		String arffDat = path + ".arff";
 		// und als ARFF-Datei speichern
-		/*saver = new ArffSaver();
-		saver.setInstances(data);
-		saver.setFile(new File(arffDat));
-		saver.writeBatch();
-		*/
+		/*
+		 * saver = new ArffSaver(); saver.setInstances(data); saver.setFile(new
+		 * File(arffDat)); saver.writeBatch();
+		 */
 		BufferedWriter writer = new BufferedWriter(new FileWriter(arffDat));
-	    writer.write(data.toString());
-	    writer.flush();
-	    writer.close();
+		writer.write(data.toString());
+		writer.flush();
+		writer.close();
 
 		// Cluster Simple KMeans
 		source = new DataSource(arffDat);
 
 		data = source.getDataSet();
-		
-		
+
 	}
 
 	public void filter(int[] array) throws Exception {
@@ -66,7 +68,7 @@ public class Wekabuilder {
 		remove.setAttributeIndicesArray(indicesOfColumnsToUse);
 		remove.setInvertSelection(false);
 		remove.setInputFormat(data);
-		
+
 		trainingSubset = Filter.useFilter(data, remove);
 	}
 
