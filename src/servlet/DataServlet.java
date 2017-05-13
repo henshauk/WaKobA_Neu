@@ -115,39 +115,7 @@ public class DataServlet extends HttpServlet {
 						}
 					}
 
-					// System.out.println("input " + item.getFieldName());
-
-
-
-					anzahlCluster = 3;// Integer.parseInt(request.getParameter("anzahl"));
-					 Wekabuilder wb = new Wekabuilder(filePath, path);
-					 int[] test = {};
-					 wb.filter(test);
-				
-					 if(algorithmus.equals("a")){
-						 try {
-								wb.buildSKM(anzahlCluster);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-					 }
-					 else if(algorithmus.equals("b")){
-						 try {
-								wb.buildFF(anzahlCluster);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-					 }
-					 else if(algorithmus.equals("c")){
-						 try {
-								wb.buildEM(anzahlCluster);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-					 }
-					
-					 
-
+					// System.out.println("input " + item.getFieldName());				 
 				}
 				
 				Wekabuilder wb = new Wekabuilder(filePath, path);
