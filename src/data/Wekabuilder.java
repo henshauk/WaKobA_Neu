@@ -10,11 +10,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 
 import weka.clusterers.Clusterer;
 import weka.clusterers.EM;
 import weka.clusterers.FarthestFirst;
 import weka.clusterers.SimpleKMeans;
+import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
@@ -159,9 +161,11 @@ public class Wekabuilder {
 		SimpleKMeans skm = new SimpleKMeans();
 		skm.setNumClusters(anzahl); // Anzahl der Cluster festlegen
 		skm.buildClusterer(trainingSubset);
+		skm.setDisplayStdDevs(false);
 		System.out.println(skm);
-
-		getStoredData(storeData(skm));
+		System.out.println("-----------------------------------------------------");
+		skm.setDisplayStdDevs(true);
+		System.out.println(skm);
 	}
 
 	public void buildFF(int anzahl) throws Exception {
@@ -169,6 +173,9 @@ public class Wekabuilder {
 		ff.setNumClusters(anzahl);
 		ff.buildClusterer(trainingSubset);
 		System.out.println(ff);
+		Enumeration<Attribute> en = ff.getClusterCentroids().get(0).enumerateAttributes();
+		System.out.println(en.toString());
+		System.out.println("-----------------------------------------------------");
 	}
 
 	public void buildEM(int anzahl) throws Exception {
