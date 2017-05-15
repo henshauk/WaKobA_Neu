@@ -111,7 +111,7 @@ public class DataServlet extends HttpServlet {
 							System.out.println("anzahl: " + anzahlCluster);
 						}
 						if (name.equals("kategorie")) {						
-							kategorien.add(Integer.parseInt(item.getString()));		//add number if checkbox unchecked				
+							kategorien.add(Integer.parseInt(item.getString()));		//add number if checkbox checked				
 						}
 					}
 
@@ -120,8 +120,8 @@ public class DataServlet extends HttpServlet {
 				
 				Wekabuilder wb = new Wekabuilder(filePath, path);
 				
-				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()]));
-				 System.out.println(Arrays.toString(kategorienArray));
+				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()])); 
+				 System.out.println("Kategoriefilter: "+Arrays.toString(kategorienArray));
 				 wb.filter(kategorienArray);
 			
 				 if(algorithmus.equals("a")){
@@ -145,6 +145,7 @@ public class DataServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 				 }
+				// wb.create3DPieChart(d);
 				
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block
