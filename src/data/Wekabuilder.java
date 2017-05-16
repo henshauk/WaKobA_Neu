@@ -78,18 +78,18 @@ public class Wekabuilder {
 		DefaultPieDataset pieDataset = new DefaultPieDataset();
 		
 		BufferedReader bReader = new BufferedReader(new FileReader(data));
-		
-		String s;
+			
 		pieDataset.setValue("BIER", 50);
 		pieDataset.setValue("WODKA", 25);
 		pieDataset.setValue("WEIN", 25);
 	
+		/*String s;
 		while ((s = bReader.readLine()) != null) {
 			String datavalue [] = s.split(" ");
 			String category = datavalue[0];
 			String value = datavalue [1];
 			pieDataset.setValue(category, Double.parseDouble(value));
-		}
+		}*/
 		bReader.close();
 		
 		
