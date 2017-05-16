@@ -80,6 +80,9 @@ public class Wekabuilder {
 		BufferedReader bReader = new BufferedReader(new FileReader(data));
 		
 		String s;
+		pieDataset.setValue("BIER", 50);
+		pieDataset.setValue("WODKA", 25);
+		pieDataset.setValue("WEIN", 25);
 	
 		while ((s = bReader.readLine()) != null) {
 			String datavalue [] = s.split(" ");
@@ -104,6 +107,11 @@ public class Wekabuilder {
 				ChartPanel chartP = new ChartPanel(chart);
 				chartP.setSize(560, 400);
 				chartP.setVisible(true);
+				
+				ChartFrame frame = new ChartFrame("AlkoholKONSUM", chart);
+				frame.pack();
+				RefineryUtilities.centerFrameOnScreen(frame);
+				frame.setVisible(true);
 
 	}
 
@@ -164,8 +172,8 @@ public class Wekabuilder {
 		skm.setDisplayStdDevs(false);
 		System.out.println(skm);
 		System.out.println("-----------------------------------------------------");
-		skm.setDisplayStdDevs(true);
-		System.out.println(skm);
+		//skm.setDisplayStdDevs(true);
+		//System.out.println(skm);
 	}
 
 	public void buildFF(int anzahl) throws Exception {

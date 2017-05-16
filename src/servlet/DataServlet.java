@@ -145,7 +145,7 @@ public class DataServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 				 }
-				// wb.create3DPieChart(d);
+				 wb.create3DPieChart(filePath);
 				
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block
