@@ -19,8 +19,8 @@
 	kategorie.add("85");
 
 	StringBuffer bf = new StringBuffer();
-	bf.append("<tr><div class=col_6><td><div class=col_6 id=container style=width: 400px; "
-			+ "height: 275px; margin: 0 auto></div>" + "<script type=text/javascript language=JavaScript>"
+	bf.append("<tr><td width=450><div id=container style=width: 450px; "
+			+ "height: 300px; margin: 0 auto></div>" + "<script type=text/javascript language=JavaScript>"
 
 			+ "$(document).ready(function() {" + "var chart = {" + "plotBackgroundColor: null,"
 			+ "plotBorderWidth: null," + "plotShadow: false};"
@@ -36,9 +36,9 @@
 			+ "var json = {};   " + "		   json.chart = chart; " + "		   json.title = title;"
 			+ "		   json.tooltip = tooltip;" + "		   json.series = series;"
 			+ "		   json.plotOptions = plotOptions;" + "		   $('#container').highcharts(json);" + "	});"
-			+ "	</script></td></div>" + "<div class=col_6><td><ul class=alt><li>Geschlecht: m</li>"
+			+ "	</script></td>" + "<td></td><td></td><td><ul class=alt><li>Geschlecht: m</li>"
 			+ "<li>Alter: 30</li><li>Kinder: 7</li><li>Familienstand: ledig</li><li>Berufstätig: ja</li><li>Nettoeinkommen: 1001"
-			+ "</li><li>Fernsehkonsum: 7</li><li>Einkaufstag: Freitag</li><li>Einkaufsuhrzeit: 7 Uhr</li></ul></td></div>"
+			+ "</li><li>Fernsehkonsum: 7</li><li>Einkaufstag: Freitag</li><li>Einkaufsuhrzeit: 7 Uhr</li></ul></td>"
 			+ "</tr>");
 %>
 
@@ -46,6 +46,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="css/kickstart.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="style.css" media="all" />
+<script type="text/javascript" src="js/kickstart.js"></script>
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
@@ -57,14 +61,21 @@
 
 <body>
 	<div class="grid">
-		<table>
-			<thead></thead>
-			<tbody>
-				<%=bf.toString()%>
-			</tbody>
-		</table>
+		<ul class="tabs left">
+			<li><a href="#new">Grafisch</a></li>
+			<li><a href="#last">Werte</a></li>
+		</ul>
 
+		<div id="new" class="tab-content">
+
+			<table cellpadding="">
+				<thead></thead>
+				<tbody>
+					<%=bf.toString()%>
+				</tbody>
+			</table>
+
+		</div>
 	</div>
-
 </body>
 </html>
