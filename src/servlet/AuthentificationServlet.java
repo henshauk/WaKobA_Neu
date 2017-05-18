@@ -34,18 +34,30 @@ public class AuthentificationServlet extends HttpServlet {
 		String user = request.getParameter("user");
 		String pass = request.getParameter("pass");
 		
-		System.out.println("."+user+".");
-		System.out.println("."+pass+".");
+		System.out.println(Authentifi.newUser("user", "pass"));
+		Authentifi.newUser("1", "pass1");
+		Authentifi.newUser("1", "pass1");
+		Authentifi.newUser("1", "pass1");
+		Authentifi.newUser("4", "pass4");
+		Authentifi.newUser("5", "pass5");
+		
+		
+		// System.out.println(this.getServletContext().getRealPath("/"));
+		
+		Authentifi.rmUser("1");
+		Authentifi.rmUser("2");
+		Authentifi.rmUser("5");
+		System.out.println(Authentifi.rmUser("2"));
+		PrintWriter out = response.getWriter();
 		
 		boolean login = Authentifi.valid(user, pass);
 		
-		
-		PrintWriter out = response.getWriter();
+		Authentifi.userAusgeben();
         
-        if(login){
+        if(login==true){
             out.println("Welcome user");
         }
-        else{
+        else if(login == false){
         	out.println("Benutzername oder Passwort Falsch!");
         }
         
