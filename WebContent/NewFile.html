@@ -2,161 +2,170 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>layout test</title>
+<link rel="stylesheet" type="text/css" href="css/kickstart.css"
+	media="all" />
+<link rel="stylesheet" type="text/css" href="style.css" media="all" />
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 </head>
 <body>
+	<ul class="tabs left">
+		<li><a href="#new">Grafisch</a></li>
+		<li><a href="#last">Werte</a></li>
+	</ul>
+
+	<div id="new" class="tab-content">
 		<table cellpadding="25">
 			<tbody>
-				<tr><td></td><td></td><td></td>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
 					<td>
 						<div id="container"
 							style="width: 550px; height: 400px; margin: 0 auto"></div> <script
 							type="text/javascript" language="JavaScript">
-$(document).ready(function() {
-	 var chart = {
-		       plotBackgroundColor: null,
-		       plotBorderWidth: null,
-		       plotShadow: false
-		   };
-		   var title = {
-		      text: ''   
-		   };      
-		   var tooltip = {
-		      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-		   };
-		   var plotOptions = {
-		      pie: {
-		         allowPointSelect: true,
-		         cursor: 'pointer',
-		         dataLabels: {
-		            enabled: true           
-		         },
-		         showInLegend: true
-		      }
-		   };
-		   var series= [{
-		      type: 'pie',
-		      name: 'Anteil am Einkaufswert',
-		      data: [
-		         ['Bier',   80.0],
-		         ['Pizza',       40.8],
-		         ['Akkuschrauber', 10.8],
-		         ['Brot',    10.5],
-		         ['Lappen',     10.2],
-		         ['Others',   10.7]
-		      ]
-		   }];     
-		      
-		   var json = {};   
-		   json.chart = chart; 
-		   json.title = title;     
-		   json.tooltip = tooltip;  
-		   json.series = series;
-		   json.plotOptions = plotOptions;
-		   $('#container').highcharts(json);  
-     
-});
-</script>
+								$(document)
+										.ready(
+												function() {
+													var chart = {
+														plotBackgroundColor : null,
+														plotBorderWidth : null,
+														plotShadow : false
+													};
+													var title = {
+														text : ''
+													};
+													var tooltip = {
+														pointFormat : '{series.name}: <b>{point.percentage:.1f}%</b>'
+													};
+													var plotOptions = {
+														pie : {
+															allowPointSelect : true,
+															cursor : 'pointer',
+															dataLabels : {
+																enabled : true
+															},
+															showInLegend : true
+														}
+													};
+													var series = [ {
+														type : 'pie',
+														name : 'Anteil am Einkaufswert',
+														data : [
+																[ 'Bier', 80.0 ],
+																[ 'Pizza', 40.8 ],
+																[
+																		'Akkuschrauber',
+																		10.8 ],
+																[ 'Brot', 10.5 ],
+																[ 'Lappen',
+																		10.2 ],
+																[ 'Others',
+																		10.7 ] ]
+													} ];
+
+													var json = {};
+													json.chart = chart;
+													json.title = title;
+													json.tooltip = tooltip;
+													json.series = series;
+													json.plotOptions = plotOptions;
+													$('#container').highcharts(
+															json);
+
+												});
+							</script>
 					</td>
 					<td></td>
-					<td><table border="1">
-							<tr>
-								<td>Geschlecht: m</td>
-							</tr>
-							<tr>
-								<td>Alter: 30</td>
-							</tr>
-							<tr>
-								<td>Kinder: 7</td>
-							</tr>
-							<tr>
-								<td>Familienstand: ledig</td>
-							</tr>
-							<tr>
-								<td>Berufstätig: ja</td>
-							</tr>
-							<tr>
-								<td>Nettoeinkommen: 1001</td>
-							</tr>
-							<tr>
-								<td>Fernsehkonsum: 7</td>
-							</tr>
-							<tr>
-								<td>Einkaufstag: Freitag</td>
-							</tr>
-							<tr>
-								<td>Einkaufsuhrzeit: 7 Uhr</td>
-							</tr>
-							<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
-							<tr>
-								<td><label for="label">Label</label> <select id="label">
-										<option value="0">Auswahl</option>
-										<option value="1">Hausfrauen</option>
-										<option value="2">Studenten</option>
-										<option value="3">Rentner</option>
-								</select></td>
-							</tr>
-						</table></td>
+					<td><ul class=alt>
+
+							<li>Geschlecht: m</li>
+							<li>Alter: 30</li>
+							<li>Kinder: 7</li>
+							<li>Familienstand: ledig</li>
+							<li>Berufstätig: ja</li>
+							<li>Nettoeinkommen: 1001</li>
+							<li>Fernsehkonsum: 7</li>
+							<li>Einkaufstag: Freitag</li>
+							<li>Einkaufsuhrzeit: 7 Uhr</li>
+							<li></li>
+							<li><label for="label">Label</label> <select id="label">
+									<option value="0">Auswahl</option>
+									<option value="1">Hausfrauen</option>
+									<option value="2">Studenten</option>
+									<option value="3">Rentner</option>
+							</select></li>
+
+						</ul></td>
 				</tr>
-				
-					
+
+
 			</tbody>
 		</table>
 		<table cellpadding="25">
 			<tbody>
-				<tr><td></td><td></td><td></td>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
 					<td>
 						<div id="container1"
 							style="width: 550px; height: 400px; margin: 0 auto"></div> <script
 							type="text/javascript" language="JavaScript">
-$(document).ready(function() {
-	 var chart = {
-		       plotBackgroundColor: null,
-		       plotBorderWidth: null,
-		       plotShadow: false
-		   };
-		   var title = {
-		      text: ''   
-		   };      
-		   var tooltip = {
-		      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-		   };
-		   var plotOptions = {
-		      pie: {
-		         allowPointSelect: true,
-		         cursor: 'pointer',
-		         dataLabels: {
-		            enabled: true           
-		         },
-		         showInLegend: true
-		      }
-		   };
-		   var series= [{
-		      type: 'pie',
-		      name: 'Anteil am Einkaufswert',
-		      data: [
-		         ['Bier',   80.0],
-		         ['Pizza',       40.8],
-		         ['Akkuschrauber', 10.8],
-		         ['Brot',    10.5],
-		         ['Lappen',     10.2],
-		         ['Others',   10.7]
-		      ]
-		   }];     
-		      
-		   var json = {};   
-		   json.chart = chart; 
-		   json.title = title;     
-		   json.tooltip = tooltip;  
-		   json.series = series;
-		   json.plotOptions = plotOptions;
-		   $('#container1').highcharts(json);  
-     
-});
-</script>
+								$(document)
+										.ready(
+												function() {
+													var chart = {
+														plotBackgroundColor : null,
+														plotBorderWidth : null,
+														plotShadow : false
+													};
+													var title = {
+														text : ''
+													};
+													var tooltip = {
+														pointFormat : '{series.name}: <b>{point.percentage:.1f}%</b>'
+													};
+													var plotOptions = {
+														pie : {
+															allowPointSelect : true,
+															cursor : 'pointer',
+															dataLabels : {
+																enabled : true
+															},
+															showInLegend : true
+														}
+													};
+													var series = [ {
+														type : 'pie',
+														name : 'Anteil am Einkaufswert',
+														data : [
+																[ 'Bier', 80.0 ],
+																[ 'Pizza', 40.8 ],
+																[
+																		'Akkuschrauber',
+																		10.8 ],
+																[ 'Brot', 10.5 ],
+																[ 'Lappen',
+																		10.2 ],
+																[ 'Others',
+																		10.7 ] ]
+													} ];
+
+													var json = {};
+													json.chart = chart;
+													json.title = title;
+													json.tooltip = tooltip;
+													json.series = series;
+													json.plotOptions = plotOptions;
+													$('#container1')
+															.highcharts(json);
+
+												});
+							</script>
 					</td>
 					<td></td>
 					<td><table border="1">
@@ -187,7 +196,11 @@ $(document).ready(function() {
 							<tr>
 								<td>Einkaufsuhrzeit: 7 Uhr</td>
 							</tr>
-							<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+							<tr></tr>
+							<tr></tr>
+							<tr></tr>
+							<tr></tr>
+							<tr></tr>
 							<tr>
 								<td><label for="label">Label</label> <select id="label">
 										<option value="0">Auswahl</option>
@@ -198,10 +211,10 @@ $(document).ready(function() {
 							</tr>
 						</table></td>
 				</tr>
-				
-					
+
+
 			</tbody>
 		</table>
-
+		</div>
 </body>
 </html>
