@@ -10,9 +10,22 @@ import java.io.IOException;
 
 
 public class Authentifi {
-	static File f = new File("C:/Users/Hauke/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/WaKobA/logins.txt");
+	static File f;
 	private static String[] users = new String[100];
 	private static String[] passwords = new String[100];
+	
+	public static void setFile(String dir){
+		f = new File(dir + File.separator + "login.txt");
+		if(!f.exists()){
+			try {
+				f.createNewFile();
+				System.out.println("create login file");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public static boolean valid(String user, String pass) throws IOException {
 		readLogins();

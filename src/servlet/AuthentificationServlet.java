@@ -20,8 +20,8 @@ public class AuthentificationServlet extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
     public AuthentificationServlet() {
-        super();
-        // TODO Auto-generated constructor stub
+    	super();
+    	// TODO Auto-generated constructor stub
     }
 
 	/**
@@ -30,7 +30,8 @@ public class AuthentificationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html;charset=UTF-8");
-		
+		Authentifi.setFile(getServletConfig().getServletContext().getRealPath("/WEB-INF"));
+        
 		String user = request.getParameter("user");
 		String pass = request.getParameter("pass");
 		
@@ -60,7 +61,7 @@ public class AuthentificationServlet extends HttpServlet {
         else if(login == false){
         	out.println("Benutzername oder Passwort Falsch!");
         }
-        
+        response.sendRedirect("upload.html");
 		
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}

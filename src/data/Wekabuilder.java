@@ -55,14 +55,16 @@ public class Wekabuilder {
 	Instances trainingSubset;
 	String datapath = "";
 
-	public Wekabuilder(String path, String dataDir) throws Exception {
+	public Wekabuilder(String file, String dataDir) throws Exception {
 		// CSV-Datei laden
 		this.datapath = dataDir;
 		loader = new CSVLoader();
-		loader.setSource(new File(path));
+		File csv = new File(file);
+		loader.setSource(csv);
 		data = loader.getDataSet();
+		System.out.println("lösche csv: "+csv.delete());
 
-		String arffDat = path + ".arff";
+		String arffDat = file + ".arff";
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(arffDat));
 		writer.write(data.toString());
@@ -108,10 +110,10 @@ public class Wekabuilder {
 				chartP.setSize(560, 400);
 				chartP.setVisible(true);
 				
-				ChartFrame frame = new ChartFrame("AlkoholKONSUM", chart);
-				frame.pack();
-				RefineryUtilities.centerFrameOnScreen(frame);
-				frame.setVisible(true);
+	//			ChartFrame frame = new ChartFrame("AlkoholKONSUM", chart);
+	//			frame.pack();
+	//			RefineryUtilities.centerFrameOnScreen(frame);
+	//			frame.setVisible(true);
 
 	}
 
@@ -172,6 +174,7 @@ public class Wekabuilder {
 		skm.setDisplayStdDevs(false);
 		System.out.println(skm);
 		System.out.println("-----------------------------------------------------");
+		storeData(skm);
 		//skm.setDisplayStdDevs(true);
 		//System.out.println(skm);
 	}

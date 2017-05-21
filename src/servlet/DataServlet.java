@@ -20,6 +20,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 
 import data.Wekabuilder;
@@ -47,7 +48,7 @@ public class DataServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.sendRedirect("auswertung.html");
+		response.sendRedirect("output.jsp");
 	}
 
 	/**
@@ -66,11 +67,16 @@ public class DataServlet extends HttpServlet {
 			// Create a factory for disk-based file items
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 
-			// Configure a repository (to ensure a secure temp location is used)
+			// read ServletPath and build upload repository
 			ServletContext servletContext = this.getServletConfig().getServletContext();
-			File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+			String servletPath = servletContext.getRealPath("/WEB-INF");
+			String uploadPath = servletPath + File.separator + UPLOAD_DIRECTORY;
+			File repository = new File (uploadPath);
+			if (!repository.exists()) {
+				repository.mkdir();
+			}
 			factory.setRepository(repository);
-			String path = repository.getAbsolutePath();
+	
 			// Create a new file upload handler
 			ServletFileUpload upload = new ServletFileUpload(factory);
 			String filePath = null;
@@ -91,7 +97,7 @@ public class DataServlet extends HttpServlet {
 
 							Date d = new Date();
 							SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
-							filePath = path + File.separator + ft.format(d) + "__" + fileName;
+							filePath = uploadPath + File.separator + ft.format(d) + "__" + fileName;
 							File storeFile = new File(filePath);
 							System.out.println("Upload " + filePath);
 
@@ -118,7 +124,7 @@ public class DataServlet extends HttpServlet {
 					// System.out.println("input " + item.getFieldName());				 
 				}
 				
-				Wekabuilder wb = new Wekabuilder(filePath, path);
+				Wekabuilder wb = new Wekabuilder(filePath, servletPath);
 				
 				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()])); 
 				 System.out.println("Kategoriefilter: "+Arrays.toString(kategorienArray));
@@ -145,8 +151,9 @@ public class DataServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 				 }
-				 wb.create3DPieChart(filePath);
-				
+				 
+				 clearFiles(repository);
+				 
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block
 				System.err.println("parse Request failed");
@@ -158,6 +165,16 @@ public class DataServlet extends HttpServlet {
 		}
 
 		doGet(request, response);
+	}
+	
+	private void clearFiles(File repository){
+		String[] files = repository.list();
+		 for(String s: files){
+			    File currentFile = new File(repository.getPath(),s);
+			    System.out.println(s);
+			    System.out.println("löschen: "+currentFile.delete());
+			    
+			}
 	}
 
 }
