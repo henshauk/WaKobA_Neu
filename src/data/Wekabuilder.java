@@ -9,8 +9,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 
 import weka.clusterers.Clusterer;
 import weka.clusterers.EM;
@@ -167,26 +170,53 @@ public class Wekabuilder {
 		System.out.println(sb.toString());
 	}
 
-	public void buildSKM(int anzahl) throws Exception {
+	public Instances buildSKM(int anzahl) throws Exception {
 		SimpleKMeans skm = new SimpleKMeans();
 		skm.setNumClusters(anzahl); // Anzahl der Cluster festlegen
 		skm.buildClusterer(trainingSubset);
 		skm.setDisplayStdDevs(false);
+		Instances inst = skm.getClusterCentroids();
 		System.out.println(skm);
 		System.out.println("-----------------------------------------------------");
 		storeData(skm);
+		
+		return inst;
 		//skm.setDisplayStdDevs(true);
 		//System.out.println(skm);
 	}
 
-	public void buildFF(int anzahl) throws Exception {
-		FarthestFirst ff = new FarthestFirst();
+	public Instances buildFF(int anzahl) throws Exception {
+		
+	    //Inintialisierungen
+	    	FarthestFirst ff = new FarthestFirst();
 		ff.setNumClusters(anzahl);
 		ff.buildClusterer(trainingSubset);
-		System.out.println(ff);
-		Enumeration<Attribute> en = ff.getClusterCentroids().get(0).enumerateAttributes();
-		System.out.println(en.toString());
-		System.out.println("-----------------------------------------------------");
+		
+		//erstelltes Set aus Clustern
+		Instances inst = ff.getClusterCentroids();
+		
+		List<List<String>> res = new ArrayList<List<String>>();
+		res = resolveInstance(inst);  // Daten aus Cluster in List<List>
+		return inst;
+		}
+		
+	
+	public static List<List<String>> resolveInstance(Instances inst){
+	        String cluster;
+		List attr = new ArrayList<String>();  //Liste für Aufzählungen
+		List<List<String>> res = new ArrayList<List<String>>();		//Liste aus Clustern
+		
+		for(int i = 0; i < inst.numInstances(); i++){
+		   System.out.println("Cluster:" + i + "\n");
+		   cluster = inst.get(i).toString();			//to String aus Cluster Instanz
+		   attr =  Arrays.asList(cluster.split("\\s*,\\s*"));	
+		   res.add(attr);						//Cluster der ClusterListe hinzufügen
+		 
+		    }
+	
+		return res;
+	    
+	    
 	}
 
 	public void buildEM(int anzahl) throws Exception {
@@ -194,6 +224,7 @@ public class Wekabuilder {
 		em.setNumClusters(anzahl);
 		em.buildClusterer(trainingSubset);
 		System.out.println(em);
+		
 	}
 
 }
