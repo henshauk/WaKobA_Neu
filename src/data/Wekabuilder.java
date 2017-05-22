@@ -188,6 +188,7 @@ public class Wekabuilder {
 		   res.add(attr);						//Cluster der ClusterListe hinzufügen
 		 
 		    }
+		
 	
 		diagrammData = res;;
 	    

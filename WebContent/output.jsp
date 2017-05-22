@@ -32,13 +32,27 @@
 	kat.add("Alter");
 	kat.add("Kinder");
 	kat.add("Familienstand");
+	kat.add("Berufstätig");
+	kat.add("Haushaltsnettoeinkommen");
+	kat.add("Fernsehkonsum");
+	kat.add("Einkaufstag");
+	kat.add("Einkaufsmonat");
+	kat.add("Einkaufsuhrzeit");
+	kat.add("Einkaufssumme");
+	kat.add("Fertiggerichte");
+	kat.add("Tiefkühlwaren");
+	kat.add("Milchprodukte");
+	kat.add("Backwaren");
+	kat.add("Obst/Gemüse");
+	kat.add("Spirituosen");
+	kat.add("Tiernahrumg");
 	kat.add("Bier");
-	kat.add("Lappen");
-	kat.add("Seife");
-	kat.add("Bro");
-	kat.add("Brt");
-	kat.add("Bot");
-	kat.add("rot");
+	kat.add("Frischfleisch");
+	kat.add("Drogerieartikel");
+	kat.add("Konserven");
+	kat.add("Kaffee/Tee");
+	kat.add("Süßigkeiten");
+	
 	List<String> cl1 = new LinkedList<String>();
 	cl1.add("1");
 	cl1.add("30");
@@ -63,13 +77,20 @@
 	cl2.add("7.7");
 	cl2.add("85");
 	cl2.add("85");
-//	List<List<String>> data = new LinkedList<List<String>>();
-//	data.add(kat);
-//	data.add(cl1);
-//	data.add(cl2);
-	List<List<String>> data = Wekabuilder.diagrammData;
+	List<List<String>> data = new LinkedList<List<String>>();
+	//data.add(kat);
+	Wekabuilder.diagrammData.add(0,kat);
+	//data.add(Wekabuilder.diagrammData.get(0));
+	//data.add(Wekabuilder.diagrammData.get(1));
+	//data.add(Wekabuilder.diagrammData.get(2));
+	
+	//data.add(cl1);
+	//data.add(cl2);
+	data = Wekabuilder.diagrammData;
 	StringBuffer sB = new StringBuffer();
 	StringBuffer sB1;
+	
+	
 	
 	int i =0;
 			Iterator<List<String>> listen = data.iterator();
