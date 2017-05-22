@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 import weka.clusterers.Clusterer;
@@ -57,10 +58,13 @@ public class Wekabuilder {
 	DataSource source;
 	Instances trainingSubset;
 	String datapath = "";
+	public static List<List<String>> diagrammData;
+	
 
 	public Wekabuilder(String file, String dataDir) throws Exception {
 		// CSV-Datei laden
 		this.datapath = dataDir;
+		diagrammData = new ArrayList<List<String>>();
 		loader = new CSVLoader();
 		File csv = new File(file);
 		loader.setSource(csv);
@@ -79,46 +83,6 @@ public class Wekabuilder {
 
 	}
 
-	public void create3DPieChart(String data) throws NumberFormatException, IOException {
-		DefaultPieDataset pieDataset = new DefaultPieDataset();
-		
-		BufferedReader bReader = new BufferedReader(new FileReader(data));
-			
-		pieDataset.setValue("BIER", 50);
-		pieDataset.setValue("WODKA", 25);
-		pieDataset.setValue("WEIN", 25);
-	
-		/*String s;
-		while ((s = bReader.readLine()) != null) {
-			String datavalue [] = s.split(" ");
-			String category = datavalue[0];
-			String value = datavalue [1];
-			pieDataset.setValue(category, Double.parseDouble(value));
-		}*/
-		bReader.close();
-		
-		
-		JFreeChart chart = ChartFactory.createPieChart3D(
-				"Pie Chart", pieDataset, true, true, true);
-
-				PiePlot3D p = (PiePlot3D) chart.getPlot();
-				p.setForegroundAlpha(0.5f);
-				p.setBackgroundAlpha(0.2f);
-
-				chart.setBackgroundPaint(Color.white);
-				chart.setAntiAlias(true);
-				chart.setBorderVisible(false);
-				chart.setTextAntiAlias(true);
-				ChartPanel chartP = new ChartPanel(chart);
-				chartP.setSize(560, 400);
-				chartP.setVisible(true);
-				
-	//			ChartFrame frame = new ChartFrame("AlkoholKONSUM", chart);
-	//			frame.pack();
-	//			RefineryUtilities.centerFrameOnScreen(frame);
-	//			frame.setVisible(true);
-
-	}
 
 	public void filter(int[] array) throws Exception {
 		int[] indicesOfColumnsToUse = array;
@@ -169,6 +133,17 @@ public class Wekabuilder {
 		System.out.println("Datei inhalt:");
 		System.out.println(sb.toString());
 	}
+	private void print(List<List<String>> list){
+		Iterator<List<String>> it = list.iterator();
+		System.out.println("list: "+list.size());
+		while(it.hasNext()){
+		List<String> a = it.next();
+		Iterator<String> aa = a.iterator();
+		while(aa.hasNext()){
+			System.out.println(aa.next());
+		}
+		}
+	}
 
 	public Instances buildSKM(int anzahl) throws Exception {
 		SimpleKMeans skm = new SimpleKMeans();
@@ -177,7 +152,8 @@ public class Wekabuilder {
 		skm.setDisplayStdDevs(false);
 		Instances inst = skm.getClusterCentroids();
 		System.out.println(skm);
-		System.out.println("-----------------------------------------------------");
+		resolveInstance(inst);
+		print(diagrammData);
 		storeData(skm);
 		
 		return inst;
@@ -195,13 +171,12 @@ public class Wekabuilder {
 		//erstelltes Set aus Clustern
 		Instances inst = ff.getClusterCentroids();
 		
-		List<List<String>> res = new ArrayList<List<String>>();
-		res = resolveInstance(inst);  // Daten aus Cluster in List<List>
+		resolveInstance(inst);  // Daten aus Cluster in List<List>
 		return inst;
 		}
 		
 	
-	public static List<List<String>> resolveInstance(Instances inst){
+	public static void resolveInstance(Instances inst){
 	        String cluster;
 		List attr = new ArrayList<String>();  //Liste für Aufzählungen
 		List<List<String>> res = new ArrayList<List<String>>();		//Liste aus Clustern
@@ -214,7 +189,7 @@ public class Wekabuilder {
 		 
 		    }
 	
-		return res;
+		diagrammData = res;;
 	    
 	    
 	}

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*"%>
-<%@ page import="data.Label" %>
+<%@ page import="data.Wekabuilder" %>
 <%
 	List<String> käuferdaten = new LinkedList<String>();
 	käuferdaten.add("Geschlecht");
@@ -63,12 +63,14 @@
 	cl2.add("7.7");
 	cl2.add("85");
 	cl2.add("85");
-	List<List<String>> data = new LinkedList<List<String>>();
-	data.add(kat);
-	data.add(cl1);
-	data.add(cl2);
+//	List<List<String>> data = new LinkedList<List<String>>();
+//	data.add(kat);
+//	data.add(cl1);
+//	data.add(cl2);
+	List<List<String>> data = Wekabuilder.diagrammData;
 	StringBuffer sB = new StringBuffer();
 	StringBuffer sB1;
+	
 	int i =0;
 			Iterator<List<String>> listen = data.iterator();
 			List<String> kategorie = listen.next();
