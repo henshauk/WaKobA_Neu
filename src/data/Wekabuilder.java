@@ -1,7 +1,5 @@
 package data;
 
-import java.awt.Color;
-import java.awt.Window;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,28 +17,12 @@ import weka.clusterers.Clusterer;
 import weka.clusterers.EM;
 import weka.clusterers.FarthestFirst;
 import weka.clusterers.SimpleKMeans;
-import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
-
-import javax.swing.JPanel;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PiePlot3D;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.DatasetGroup;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
-import org.jfree.data.io.CSV;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
 
 public class Wekabuilder {
 
@@ -59,6 +40,14 @@ public class Wekabuilder {
 	Instances trainingSubset;
 	String datapath = "";
 	public static List<List<String>> diagrammData;
+	
+	
+	
+	public static final String[] katNamen = {"Geschlecht","Alter","Kinder","Familienstand","Berufstätig","Haushaltsnettoeinkommen",
+										"Fernsehkonsum","Einkaufstag","Einkaufsmonat","Einkaufsuhrzeit","Einkaufssumme",
+										"Fertiggerichte","Tiefkühlware",
+										 "Milchprodukte","Backwaren","Obst/Gemüse","Spirituosen","Tiernahrung",
+										 "Bier","Frischfleisch","Drogerieartikel","Konserven","Kaffee/Tee","Süßigkeiten"};
 	
 
 	public Wekabuilder(String file, String dataDir) throws Exception {
@@ -90,9 +79,9 @@ public class Wekabuilder {
 		remove.setAttributeIndicesArray(indicesOfColumnsToUse);
 		remove.setInvertSelection(true);
 		remove.setInputFormat(data);
-
+		System.out.println(Arrays.toString(array));
 		trainingSubset = Filter.useFilter(data, remove);
-
+		addKatToDiagrammData(indicesOfColumnsToUse);
 	}
 
 	public String storeData(Clusterer clusterer) throws IOException {
@@ -189,10 +178,19 @@ public class Wekabuilder {
 		 
 		    }
 		
-	
-		diagrammData = res;;
+		diagrammData.addAll(res);
+		
 	    
 	    
+	}
+	public static void addKatToDiagrammData(int[] array){  
+		
+		ArrayList<String> kat = new ArrayList<String>();
+		
+		for(int i = 0; i < array.length; i++){
+			kat.add(katNamen[array[i]]);			// fügt die Namen der gewählten Kategorien hinzu
+		}
+		diagrammData.add(0,kat);		// fügt die Liste der gewählten Kategorien den Daten hinzu
 	}
 
 	public void buildEM(int anzahl) throws Exception {

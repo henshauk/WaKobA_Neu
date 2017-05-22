@@ -3,6 +3,11 @@
 <%@ page import="java.util.*"%>
 <%@ page import="data.Wekabuilder" %>
 <%
+
+
+	List<List<String>> data = new LinkedList<List<String>>();
+	data = Wekabuilder.diagrammData;  //Daten für die Auswertung liegen komplett in diagrammData
+
 	List<String> käuferdaten = new LinkedList<String>();
 	käuferdaten.add("Geschlecht");
 	käuferdaten.add("Alter");
@@ -27,66 +32,8 @@
 	while(labels.hasNext()){
 		label.append("<option value="+(++j)+">"+labels.next()+"</option>");
 	}
-	List<String> kat = new ArrayList<String>();
-	kat.add("Geschlecht");
-	kat.add("Alter");
-	kat.add("Kinder");
-	kat.add("Familienstand");
-	kat.add("Berufstätig");
-	kat.add("Haushaltsnettoeinkommen");
-	kat.add("Fernsehkonsum");
-	kat.add("Einkaufstag");
-	kat.add("Einkaufsmonat");
-	kat.add("Einkaufsuhrzeit");
-	kat.add("Einkaufssumme");
-	kat.add("Fertiggerichte");
-	kat.add("Tiefkühlwaren");
-	kat.add("Milchprodukte");
-	kat.add("Backwaren");
-	kat.add("Obst/Gemüse");
-	kat.add("Spirituosen");
-	kat.add("Tiernahrumg");
-	kat.add("Bier");
-	kat.add("Frischfleisch");
-	kat.add("Drogerieartikel");
-	kat.add("Konserven");
-	kat.add("Kaffee/Tee");
-	kat.add("Süßigkeiten");
-	
-	List<String> cl1 = new LinkedList<String>();
-	cl1.add("1");
-	cl1.add("30");
-	cl1.add("85");
-	cl1.add("37.3");
-	cl1.add("85");
-	cl1.add("7.7");
-	cl1.add("1");
-	cl1.add("37.3");
-	cl1.add("7.7");
-	cl1.add("7.7");
-	cl1.add("7.7");
-	List<String> cl2 = new LinkedList<String>();
-	cl2.add("1");
-	cl2.add("50");
-	cl2.add("7.7");
-	cl2.add("19.99");
-	cl2.add("85");
-	cl2.add("7.7");
-	cl2.add("85");
-	cl2.add("19.99");
-	cl2.add("7.7");
-	cl2.add("85");
-	cl2.add("85");
-	List<List<String>> data = new LinkedList<List<String>>();
-	//data.add(kat);
-	Wekabuilder.diagrammData.add(0,kat);
-	//data.add(Wekabuilder.diagrammData.get(0));
-	//data.add(Wekabuilder.diagrammData.get(1));
-	//data.add(Wekabuilder.diagrammData.get(2));
-	
-	//data.add(cl1);
-	//data.add(cl2);
-	data = Wekabuilder.diagrammData;
+
+
 	StringBuffer sB = new StringBuffer();
 	StringBuffer sB1;
 	
