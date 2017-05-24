@@ -21,22 +21,21 @@
 	käuferdaten.add("Einkaufsuhrzeit");
 	käuferdaten.add("Einkaufssumme");
 	
+
 	Set<String> lab = new HashSet<String>();
 	lab.add("Studenten");
 	lab.add("Rentner");
 	lab.add("Hausfrauen");
 	Iterator<String> labels = lab.iterator();
-	StringBuffer label = new StringBuffer();
-	String current;
+	StringBuffer label = new StringBuffer();		//  create content for Label dropdown
 	int j =0;
 	while(labels.hasNext()){
 		label.append("<option value="+(++j)+">"+labels.next()+"</option>");
 	}
 
 
-	StringBuffer sB = new StringBuffer();
-	StringBuffer sB1;
-	
+	StringBuffer sB = new StringBuffer();		//  create the chart
+	StringBuffer sB1;							//  create the table
 	
 	
 	int i =0;
@@ -47,7 +46,7 @@
 				Iterator<String> kategorie_it = kategorie.iterator();
 				List<String> cluster = listen.next();
 				Iterator<String> cluster_it = cluster.iterator();
-				System.out.println(i);
+	
 				sB.append("<tr><td></td><td></td><td width=450><div id=container"+String.valueOf(i)+" style=width: 450px; "
 						+ "height: 300px; margin: 0 auto></div>" + "<script type=text/javascript language=JavaScript>"
 
@@ -60,13 +59,15 @@
 						+ " enabled: true}, showInLegend: true } };"
 						+ " var series= [{type: 'pie', name: 'Anteil am Einkaufswert', data: [");
 				sB1.append("<td></td><td><ul class=alt>");
+	
 				while(kategorie_it.hasNext()){
 					String kateg = kategorie_it.next();
 					String value = cluster_it.next();
-					if(käuferdaten.contains(kateg)){
+					
+					if(käuferdaten.contains(kateg)){			//  data about persons
 						sB1.append("<li>"+kateg+":"+value+"</li>");
 					}
-					else {
+					else {										// data on goods
 					sB.append("['"+kateg+"',"+value+"]");
 					
 						if(kategorie_it.hasNext()){
@@ -79,14 +80,13 @@
 					}
 					
 				}
-				sB.append("]} ];");
+				sB.append("]} ];");     //  end of diagramm data
 				
 				sB.append(" var json = {};   " + " json.chart = chart; " + " json.title = title;"
 						+ " json.tooltip = tooltip;" + " json.series = series;"
 						+ " json.plotOptions = plotOptions;" + " $('#container"+String.valueOf(i++)+"').highcharts(json);" + "	});"
 						+ "	</script></td>" + "<td></td>");
 				sB.append(sB1);
-					System.out.println(i+": "+sB);
 					
 			}
 			
@@ -126,6 +126,10 @@
 				</tbody>
 			</table>
 
+		</div>
+		<div id="last" class="tab-content">
+			Hallo Dude
+			<%=Wekabuilder.table%>
 		</div>
 	</div>
 </body>

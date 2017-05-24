@@ -1,19 +1,23 @@
 package data;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
-import weka.clusterers.Clusterer;
 import weka.clusterers.EM;
 import weka.clusterers.FarthestFirst;
 import weka.clusterers.SimpleKMeans;
@@ -40,7 +44,10 @@ public class Wekabuilder {
 	Instances trainingSubset;
 	String datapath = "";
 	public static List<List<String>> diagrammData;
-	
+	public static String table;
+	Result result;
+	public static List<String> resultNames;
+	private String storeDir;
 	
 	
 	public static final String[] katNamen = {"Geschlecht","Alter","Kinder","Familienstand","Berufstätig","Haushaltsnettoeinkommen",
@@ -49,11 +56,14 @@ public class Wekabuilder {
 										 "Milchprodukte","Backwaren","Obst/Gemüse","Spirituosen","Tiernahrung",
 										 "Bier","Frischfleisch","Drogerieartikel","Konserven","Kaffee/Tee","Süßigkeiten"};
 	
-
 	public Wekabuilder(String file, String dataDir) throws Exception {
 		// CSV-Datei laden
-		this.datapath = dataDir;
+		storeDir = dataDir + File.separator + "store";
 		diagrammData = new ArrayList<List<String>>();
+		
+		resultNames = new ArrayList<String>();
+		builtList();
+		
 		loader = new CSVLoader();
 		File csv = new File(file);
 		loader.setSource(csv);
@@ -72,7 +82,6 @@ public class Wekabuilder {
 
 	}
 
-
 	public void filter(int[] array) throws Exception {
 		int[] indicesOfColumnsToUse = array;
 		Remove remove = new Remove();
@@ -84,73 +93,87 @@ public class Wekabuilder {
 		addKatToDiagrammData(indicesOfColumnsToUse);
 	}
 
-	public String storeData(Clusterer clusterer) throws IOException {
+	public String storeResult(Result res) throws IOException {
 
 		Date d = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
-		String result = datapath + File.separator + "store";
 
-		File storeDir = new File(result);
-		if (!storeDir.exists()) {
-			storeDir.mkdir();
+		File store = new File(storeDir);
+		if (!store.exists()) {
+			store.mkdir();
 		}
 
-		System.out.println("store " + storeDir.getAbsolutePath());
-
-		String storedata = result + File.separator + ft.format(d);
-		BufferedWriter writer = new BufferedWriter(new FileWriter(storedata));
-		writer.write(clusterer.toString());
-		writer.flush();
-		writer.close();
-
+		System.out.println("store " + store.getAbsolutePath());
+		String storedata = storeDir + File.separator + ft.format(d);
+		resultNames.add(ft.format(d));
+		
+		OutputStream fos = null;
+		try{
+		fos = new FileOutputStream(storedata);
+		ObjectOutputStream oo = new ObjectOutputStream(fos);
+		oo.writeObject(res);
+		}catch(IOException e){
+			System.err.println(e);
+		}finally{
+			fos.close();
+		}
 		return storedata;
-
 	}
 
-	public void getStoredData(String storeDir) throws IOException {
 
-		StringBuilder sb = new StringBuilder();
+	public List<Result> getStoredData() throws IOException {
 
-		String line = "";
-		BufferedReader reader = new BufferedReader(new FileReader(storeDir));
-		while ((line = reader.readLine()) != null) {
-			sb.append(line + "\n");
+		List<Result> list = new LinkedList<Result>();
 
-		}
-		reader.close();
+		InputStream fis = null;
+		try{
+			Iterator<String> it = resultNames.iterator();		
+			while(it.hasNext()){
 
-		System.out.println("Datei inhalt:");
-		System.out.println(sb.toString());
+				fis = new FileInputStream(storeDir + File.separator + it.next());
+			ObjectInputStream oo = new ObjectInputStream(fis);
+			list.add((Result)oo.readObject());
+		
+			}
+			}catch(IOException e){
+				System.err.println(e);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}finally{
+				fis.close();
+			}
+		return list;
+	
 	}
-	private void print(List<List<String>> list){
-		Iterator<List<String>> it = list.iterator();
-		System.out.println("list: "+list.size());
-		while(it.hasNext()){
-		List<String> a = it.next();
-		Iterator<String> aa = a.iterator();
-		while(aa.hasNext()){
-			System.out.println(aa.next());
-		}
-		}
-	}
+	
+	
 
-	public Instances buildSKM(int anzahl) throws Exception {
+
+	public void buildSKM(int anzahl) throws Exception {
 		SimpleKMeans skm = new SimpleKMeans();
 		skm.setNumClusters(anzahl); // Anzahl der Cluster festlegen
 		skm.buildClusterer(trainingSubset);
+		table = skm.toString();
 		skm.setDisplayStdDevs(false);
+
 		Instances inst = skm.getClusterCentroids();
-		System.out.println(skm);
 		resolveInstance(inst);
-		print(diagrammData);
-		storeData(skm);
+		Result result = new Result(diagrammData,skm.toString());
+		storeResult(result);
+		getStoredData();
+	}
+	
+	private void builtList(){
 		
-		return inst;
-		//skm.setDisplayStdDevs(true);
-		//System.out.println(skm);
+		File store = new File(storeDir);
+		String[] files = store.list();
+		 for(String s: files){
+			    System.out.println("namen: "+s);
+			    resultNames.add(s);
+			}
 	}
 
-	public Instances buildFF(int anzahl) throws Exception {
+	public void buildFF(int anzahl) throws Exception {
 		
 	    //Inintialisierungen
 	    	FarthestFirst ff = new FarthestFirst();
@@ -159,15 +182,15 @@ public class Wekabuilder {
 		
 		//erstelltes Set aus Clustern
 		Instances inst = ff.getClusterCentroids();
-		
 		resolveInstance(inst);  // Daten aus Cluster in List<List>
-		return inst;
-		}
-		
+		Result result = new Result(diagrammData,ff.toString());
+		storeResult(result);
+
+	}		
 	
 	public static void resolveInstance(Instances inst){
 	        String cluster;
-		List attr = new ArrayList<String>();  //Liste für Aufzählungen
+		List<String> attr = new ArrayList<String>();  //Liste für Aufzählungen
 		List<List<String>> res = new ArrayList<List<String>>();		//Liste aus Clustern
 		
 		for(int i = 0; i < inst.numInstances(); i++){
