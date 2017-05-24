@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,9 +41,8 @@ public class Wekabuilder {
 	ArffSaver saver;
 	DataSource source;
 	Instances trainingSubset;
-	String datapath = "";
+
 	public static List<List<String>> diagrammData;
-	public static String table;
 	Result result;
 	public static List<String> resultNames;
 	private String storeDir;
@@ -121,20 +119,19 @@ public class Wekabuilder {
 	}
 
 
-	public List<Result> getStoredData() throws IOException {
+	public List<List<String>> getStoredData(String name) throws IOException {
 
-		List<Result> list = new LinkedList<Result>();
+		List<List<String>> list = new LinkedList<List<String>>();
 
 		InputStream fis = null;
 		try{
-			Iterator<String> it = resultNames.iterator();		
-			while(it.hasNext()){
+//			Iterator<String> it = resultNames.iterator();		
+//			while(it.hasNext()){
 
-				fis = new FileInputStream(storeDir + File.separator + it.next());
+			fis = new FileInputStream(storeDir + File.separator + name);
 			ObjectInputStream oo = new ObjectInputStream(fis);
-			list.add((Result)oo.readObject());
-		
-			}
+			list = (((Result)oo.readObject()).getDiagrammData());
+//			}
 			}catch(IOException e){
 				System.err.println(e);
 			} catch (ClassNotFoundException e) {
@@ -153,14 +150,13 @@ public class Wekabuilder {
 		SimpleKMeans skm = new SimpleKMeans();
 		skm.setNumClusters(anzahl); // Anzahl der Cluster festlegen
 		skm.buildClusterer(trainingSubset);
-		table = skm.toString();
 		skm.setDisplayStdDevs(false);
 
 		Instances inst = skm.getClusterCentroids();
 		resolveInstance(inst);
-		Result result = new Result(diagrammData,skm.toString());
+		Result result = new Result(diagrammData);
 		storeResult(result);
-		getStoredData();
+//		getStoredData();
 	}
 	
 	private void builtList(){
@@ -183,7 +179,7 @@ public class Wekabuilder {
 		//erstelltes Set aus Clustern
 		Instances inst = ff.getClusterCentroids();
 		resolveInstance(inst);  // Daten aus Cluster in List<List>
-		Result result = new Result(diagrammData,ff.toString());
+		Result result = new Result(diagrammData);
 		storeResult(result);
 
 	}		
