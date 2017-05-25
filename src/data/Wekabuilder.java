@@ -45,7 +45,8 @@ public class Wekabuilder {
 	public static List<List<String>> diagrammData;
 	Result result;
 	public static List<String> resultNames;
-	private String storeDir;
+	private static String storeDir;
+	private static int resultsToSave = 5;
 	
 	
 	public static final String[] katNamen = {"Geschlecht","Alter","Kinder","Familienstand","Berufstätig","Haushaltsnettoeinkommen",
@@ -99,17 +100,15 @@ public class Wekabuilder {
  */
 	public void storeResult(Result res) throws IOException {
 
-		Date d = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
-
 		File store = new File(storeDir);
 		if (!store.exists()) {
 			store.mkdir();
 		}
 
-		System.out.println("store " + store.getAbsolutePath());
+		Date d = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
+
 		String storedata = storeDir + File.separator + ft.format(d);
-		resultNames.add(ft.format(d));
 		
 		OutputStream fos = null;
 		try{
@@ -130,7 +129,7 @@ public class Wekabuilder {
  * @return 		- List<List<String>> für output.jsp
  * @throws IOException
  */
-	public List<List<String>> getStoredData(String name) throws IOException {
+	public static List<List<String>> getStoredData(String name) throws IOException {
 
 		List<List<String>> list = new LinkedList<List<String>>();
 
@@ -165,19 +164,26 @@ public class Wekabuilder {
 		resolveInstance(inst);
 		Result result = new Result(diagrammData);
 		storeResult(result);
-//		getStoredData();
 	}
 	
 	/**
 	 *  Füllt die Liste 'resultNames' mit den Namen der gespeicherten Ergebnisse
+	 *  Zusätlich werden Ergebnisse gelöscht die über der festgelegten Anzahl liegen
 	 */
 	private void builtList(){
 		
 		File store = new File(storeDir);
 		String[] files = store.list();
+		int diff = files.length - resultsToSave;
 		 for(String s: files){
+			 	if(diff > 0){
+			 		File current = new File(storeDir + File.separator + s);
+			 		current.delete();
+			 		diff--;
+			 	}else {
 			    System.out.println("namen: "+s);
 			    resultNames.add(s);
+			 	}
 			}
 	}
 
