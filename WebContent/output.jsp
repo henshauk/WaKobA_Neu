@@ -128,8 +128,7 @@
 
 		</div>
 		<div id="last" class="tab-content">
-			Hallo Dude
-			<%=Wekabuilder.table%>
+			Hallo Dude kein Tab da
 		</div>
 	</div>
 </body>

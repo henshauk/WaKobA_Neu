@@ -90,8 +90,14 @@ public class Wekabuilder {
 		trainingSubset = Filter.useFilter(data, remove);
 		addKatToDiagrammData(indicesOfColumnsToUse);
 	}
-
-	public String storeResult(Result res) throws IOException {
+	
+/**
+ *  Speichert das Ergebnis einer Analyse ab
+ * 
+ * @param res  - das zu speichernde Ergebnis
+ * @throws IOException
+ */
+	public void storeResult(Result res) throws IOException {
 
 		Date d = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
@@ -115,24 +121,27 @@ public class Wekabuilder {
 		}finally{
 			fos.close();
 		}
-		return storedata;
 	}
 
-
+/**
+ *  Liefert eine Liste mit dem Ergebnis einer gespeicherten Analyse zurück 
+ * 
+ * @param name  - Name der Datei, die das gesuchte Ergebnis beinhaltet
+ * @return 		- List<List<String>> für output.jsp
+ * @throws IOException
+ */
 	public List<List<String>> getStoredData(String name) throws IOException {
 
 		List<List<String>> list = new LinkedList<List<String>>();
 
 		InputStream fis = null;
 		try{
-//			Iterator<String> it = resultNames.iterator();		
-//			while(it.hasNext()){
 
 			fis = new FileInputStream(storeDir + File.separator + name);
 			ObjectInputStream oo = new ObjectInputStream(fis);
 			list = (((Result)oo.readObject()).getDiagrammData());
-//			}
-			}catch(IOException e){
+
+		}catch(IOException e){
 				System.err.println(e);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -159,6 +168,9 @@ public class Wekabuilder {
 //		getStoredData();
 	}
 	
+	/**
+	 *  Füllt die Liste 'resultNames' mit den Namen der gespeicherten Ergebnisse
+	 */
 	private void builtList(){
 		
 		File store = new File(storeDir);

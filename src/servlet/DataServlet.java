@@ -51,6 +51,8 @@ public class DataServlet extends HttpServlet {
 	}
 
 	/**
+	 *  Verarbeitung der gewünschten Einstellungen inkl. starten Analyse 
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -166,6 +168,11 @@ public class DataServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
+	/**
+	 *  Löschen der Upload-Dateien nachdem dass Ergebnis vorliegt
+	 * 
+	 * @param repository  - upload Verzeichnis
+	 */
 	private void clearFiles(File repository){
 		String[] files = repository.list();
 		 for(String s: files){
