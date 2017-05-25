@@ -1,8 +1,9 @@
 package whiteBoxTests;
 
 import static org.junit.Assert.*;
-
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -12,42 +13,67 @@ import org.junit.Ignore;
 import org.junit.Test;
 import data.Authentifi;
 
+
 public class AuthentifiTest {
 	
 	//TBD: file festlegen und ggf. Logindaten eintragen, die schon vor dem Test existieren müssen
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-
+	public File f;
+	public String dir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
+	public String file = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF\\login.txt";
+	public FileWriter fw;
+	
 	@Before
 	public void setUpStreams() {
 		System.setOut(new PrintStream(outContent));
+		
+		f = new File(file);
+		try {
+			fw = new FileWriter(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			fw.write("user" + System.getProperty("line.separator") + "pass" + System.getProperty("line.separator"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@After
 	public void cleanUpStreams() {
 		System.setOut(null);
+		
+		f.delete();
 	}
 
-	@Ignore
+	@Test
 	public void testSetFileNew() {
-		// erstellt eine neue Datei im angegeben Ordner
-		String dir = ""; // TBD
-		Authentifi.setFile(dir);
-		assertEquals("create login file" + System.getProperty("line.separator"), outContent.toString());
+		assertTrue(f.exists());
+		//Authentifi.setFile(dir);
+		//assertEquals("create login file" + System.getProperty("line.separator"), outContent.toString());
 	}
 
-	@Ignore
+	@Test
 	public void testSetFileExisting() {
-		// Datei existiert schon => Bestätigungsmeldung?
-		String dir = ""; // TBD
 		Authentifi.setFile(dir);
+		assertNotEquals("create login file" + System.getProperty("line.separator"), outContent.toString());
 	}
 
-	@Ignore
+	@Test
 	public void testValidGood() {
 		// testet den Login mit gültigen Daten
-		String user = "test";
-		String pass = "testpw";
+		String user = "user";
+		String pass = "pass";
 		boolean accessGranted = false;
 		try {
 			accessGranted = Authentifi.valid(user, pass);
@@ -57,12 +83,12 @@ public class AuthentifiTest {
 		assertTrue(accessGranted);
 	}
 
-	@Ignore
+	@Test
 	public void testValidBadUsername() {
 		// testet den Login mit nichtexistentem Usernamen und Passwort,
 		// das von jemand anderem benutzt wird
 		String user = "test";
-		String pass = "testpw";
+		String pass = "pass";
 		boolean accessGranted = true;
 		try {
 			accessGranted = Authentifi.valid(user, pass);
@@ -72,10 +98,10 @@ public class AuthentifiTest {
 		assertFalse(accessGranted);
 	}
 
-	@Ignore
+	@Test
 	public void testValidBadPassword() {
 		// testet den Login mit gültigem Usernamen, aber falschem Passwort
-		String user = "test";
+		String user = "user";
 		String pass = "testpw";
 		boolean accessGranted = true;
 		try {
@@ -86,7 +112,7 @@ public class AuthentifiTest {
 		assertFalse(accessGranted);
 	}
 
-	@Ignore
+	@Test
 	public void testReadLogins() {
 		try {
 			Authentifi.readLogins();
@@ -96,7 +122,7 @@ public class AuthentifiTest {
 		// TBD: Arrays kontrollieren?
 	}
 
-	@Ignore
+	@Test
 	public void testWriteLogins() {
 		String[] users = { "user1", "user2" };
 		String[] passwords = { "pw1", "pw2" };
@@ -109,11 +135,11 @@ public class AuthentifiTest {
 		// => mit userAusgeben()? Erst separat testen.
 	}
 
-	@Ignore
+	@Test
 	public void testNewUserGood() {
 		// legt einen neuen Benutzer an, dessen Username noch nicht existiert
-		String user = "user";
-		String pw = "pw";
+		String user = "newUser";
+		String pw = "password";
 		try {
 			assertEquals(Authentifi.newUser(user, pw),
 					"Benutzer " + user + " erfolreich angelegt!");
@@ -122,14 +148,14 @@ public class AuthentifiTest {
 		}
 	}
 	
-	@Ignore
+	@Test
 	public void testNewUserBadUsername() {
 		//versucht einen neuen Nutzer anzulegen, dessen Username bereits vergeben ist
 		String user = "user";
 		String pw = "pw";
 		try {
 			assertEquals(Authentifi.newUser(user, pw),
-					"Benutzer " + user + " erfolreich angelegt!");
+					"Nutzername "+ user +" Bereits vergeben!");
 		} catch (IOException e) {
 			fail("IOException ist aufgetreten");
 		}
