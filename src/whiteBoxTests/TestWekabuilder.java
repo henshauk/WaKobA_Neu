@@ -2,11 +2,10 @@ package whiteBoxTests;
 
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import data.Wekabuilder;
 
-public class WekabuilderTest {
+public class TestWekabuilder {
 
 	@Test
 	public void testConstructorGood() {

@@ -14,7 +14,7 @@ import org.junit.Test;
 import data.Authentifi;
 
 
-public class AuthentifiTest {
+public class TestAuthentifi {
 	
 	//TBD: file festlegen und ggf. Logindaten eintragen, die schon vor dem Test existieren müssen
 

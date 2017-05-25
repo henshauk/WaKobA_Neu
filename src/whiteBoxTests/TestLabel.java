@@ -5,11 +5,10 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import data.Label;
 
-public class LabelTest {
+public class TestLabel {
 
 	@Test
 	public void testLoadCombo() {
