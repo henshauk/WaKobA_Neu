@@ -67,7 +67,7 @@ public class Wekabuilder {
 		File csv = new File(file);
 		loader.setSource(csv);
 		data = loader.getDataSet();
-		System.out.println("lösche csv: "+csv.delete());
+//		System.out.println("lösche csv: "+csv.delete());
 
 		String arffDat = file + ".arff";
 
@@ -87,7 +87,7 @@ public class Wekabuilder {
 		remove.setAttributeIndicesArray(indicesOfColumnsToUse);
 		remove.setInvertSelection(true);
 		remove.setInputFormat(data);
-		System.out.println(Arrays.toString(array));
+//		System.out.println(Arrays.toString(array));
 		trainingSubset = Filter.useFilter(data, remove);
 		addKatToDiagrammData(indicesOfColumnsToUse);
 	}
@@ -181,7 +181,6 @@ public class Wekabuilder {
 			 		current.delete();
 			 		diff--;
 			 	}else {
-			    System.out.println("namen: "+s);
 			    resultNames.add(s);
 			 	}
 			}
@@ -235,7 +234,6 @@ public class Wekabuilder {
 		em.setNumClusters(anzahl);
 		em.buildClusterer(trainingSubset);
 		System.out.println(em);
-		
 	}
 
 }

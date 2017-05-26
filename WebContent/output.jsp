@@ -3,12 +3,14 @@
 <%@ page import="java.util.*"%>
 <%@ page import="data.Wekabuilder"%>
 <%
+	//  für die upload Seite
 	StringBuffer auswertungen = new StringBuffer();
 	List<String> stored = Wekabuilder.resultNames;
 
 	for (String name : stored) {
 		auswertungen.append("<li><a href=output.jsp?store=" + name + ">" + name + "</a></li>");
 	}
+	//
 
 	List<List<String>> data = new LinkedList<List<String>>();
 	Enumeration<String> param = request.getParameterNames();
@@ -25,6 +27,23 @@
 		data = Wekabuilder.diagrammData; //Daten für die Auswertung liegen komplett in diagrammData
 	}
 
+	StringBuffer table = new StringBuffer();
+	int currentRow = 0;
+	int numRows = data.get(0).size();
+	int currentCluster;
+	int numCluster = (data.size());
+	while (currentRow < numRows) { //  Zeilenweise Tabelle mit allen Werten füllen
+		table.append("<tr><td>" + data.get(0).get(currentRow) + "</td>");
+		currentCluster = 1;
+		while (currentCluster < numCluster) { //  Tabellenspalte für jeden weiteren Cluster erstellen
+			table.append("" + "<td>" + data.get(currentCluster).get(currentRow) + "</td>");
+			currentCluster++;
+		}
+		table.append("</tr>");
+		currentRow++;
+	}
+	
+
 	List<String> käuferdaten = new LinkedList<String>(); //  Vergleichsliste um die Daten 
 	käuferdaten.add("Geschlecht"); //  zwischen Person und Ware zu trennen
 	käuferdaten.add("Alter");
@@ -38,6 +57,10 @@
 	käuferdaten.add("Einkaufsuhrzeit");
 	käuferdaten.add("Einkaufssumme");
 
+
+	// Pfad
+	System.out.println("JSP-Kontext: "+getServletContext().getRealPath("/WEB-INF"));
+	
 	Set<String> lab = new HashSet<String>();
 	lab.add("Studenten");
 	lab.add("Rentner");
@@ -49,18 +72,19 @@
 		label.append("<option value=" + (++j) + ">" + labels.next() + "</option>");
 	}
 
-	StringBuffer sB = new StringBuffer(); //  create the chart
-	StringBuffer sB1; //  create the table
+	StringBuffer sB = new StringBuffer(); //  erstellen des Diagramms
+	StringBuffer sB1; //  erstellen der tabelle
 
 	int i = 0;
 	Iterator<List<String>> listen = data.iterator();
 	List<String> kategorie = listen.next();
-	while (listen.hasNext()) {
+	while (listen.hasNext()) { //   für jeden Cluster
 		sB1 = new StringBuffer();
 		Iterator<String> kategorie_it = kategorie.iterator();
 		List<String> cluster = listen.next();
 		Iterator<String> cluster_it = cluster.iterator();
 
+		//  Rahmen für Diagramm
 		sB.append("<tr><td></td><td></td><td width=450><div id=container" + String.valueOf(i)
 				+ " style=width: 450px; " + "height: 300px; margin: 0 auto></div>"
 				+ "<script type=text/javascript language=JavaScript>"
@@ -75,21 +99,24 @@
 				+ " var series= [{type: 'pie', name: 'Anteil am Einkaufswert', data: [");
 		sB1.append("<td></td><td><ul class=alt>");
 
-		while (kategorie_it.hasNext()) {
+		while (kategorie_it.hasNext()) { //  Diagramm und Tabelle füllen
 			String kateg = kategorie_it.next();
 			String value = cluster_it.next();
 
 			if (käuferdaten.contains(kateg)) { //  prüfen ob es sich um Personenbezogene Werte handelt
 				sB1.append("<li>" + kateg + ":" + value + "</li>");
-			} else { 
+			} else {
 				sB.append("['" + kateg + "'," + value + "]");
 
 				if (kategorie_it.hasNext()) {
 					sB.append(",");
 				} else {
-					sB1.append("<li></li><li><label for=label>Label</label> <select id=label>"
+					sB1.append("<li></li><li> <select id=label>" //  Dropbox für Label
 							+ "<option value=0>Auswahl</option>" + label
-							+ "</select></li></ul></td><td></td></tr><tr></tr>");
+							+ "</select><label for=label>--Label</label></li>");
+					sB1.append("<li> <select id=marketing>" //  Dropbox für Marketingvorschläge
+							+ "<option value=0>Auswahl</option>" + label
+							+ "</select><label for=marketing>--Marketing</label></li></ul></td><td></td></tr><tr></tr>");
 				}
 			}
 
@@ -105,17 +132,21 @@
 	}
 %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
 
-	<!-- CSS -->
-<link rel="stylesheet" type="text/css" href="css/kickstart.css" media="all" />
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="css/kickstart.css"
+	media="all" />
 <link rel="stylesheet" type="text/css" href="style.css" media="all" />
-	<!-- Javascript -->
+<!-- Javascript -->
 <script type="text/javascript" src="js/kickstart.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 
 <title>Warenkorb Analyse</title>
@@ -125,27 +156,26 @@
 	<h4 align=center>Ergebnis der Analyse</h4>
 
 	<div class="grid">
-		<section>
 		<ul class="tabs left">
-			<li><a href="#new">Grafisch</a></li>
-			<li><a href="#last">Tabelle</a></li>
+			<li><a href="#grafik">Grafisch</a></li>
+			<li><a href="#tabelle">Tabelle</a></li>
 		</ul>
 
-		<div id="new" class="tab-content">
-
+		<div id="grafik" class="tab-content">
 			<table cellpadding="">
 				<thead></thead>
 				<tbody>
 					<%=sB.toString()%>
 				</tbody>
 			</table>
-
 		</div>
-		<div id="last" class="tab-content">
+		<div id="tabelle" class="tab-content">
 			Hallo Dude kein Tab da
+			<table>
+				<%=table.toString()%>
+			</table>
 			<%=auswertungen.toString()%>
 		</div>
-		</section>
 	</div>
 </body>
 </html>
