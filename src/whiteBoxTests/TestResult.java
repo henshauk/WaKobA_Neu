@@ -1,10 +1,11 @@
 package whiteBoxTests;
 
-import static org.junit.Assert.*;
+import data.Result;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import data.Result;
+import static org.junit.Assert.*;
 
 public class TestResult {
 

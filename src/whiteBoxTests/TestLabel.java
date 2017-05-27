@@ -1,12 +1,11 @@
 package whiteBoxTests;
 
-import static org.junit.Assert.*;
+import data.Label;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.junit.Test;
-import data.Label;
+import static org.junit.Assert.*;
 
 public class TestLabel {
 
@@ -41,7 +40,7 @@ public class TestLabel {
 			fail("ClassNotFoundException ist aufgetreten!");
 		} catch (IOException e) {
 			// fail("IOException ist aufgetreten!");
-		}
+        }
 
 		l.addLabel("Arbeitslose");
 

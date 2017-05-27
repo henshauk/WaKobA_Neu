@@ -1,6 +1,6 @@
 package whiteBoxTests;
 
-import static org.junit.Assert.*;
+import data.Wekabuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -8,15 +8,15 @@ import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
-import data.Wekabuilder;
 
 public class TestWekabuilderConstructor {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-	String path = "C:\\Users\\Henning\\Desktop\\Uni\\Softwareprojektmanagement\\Weka Daten\\SPM_TestdatensatzMittel_2017.csv";
-	String dataDir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
-	Wekabuilder w;
+	private String path = "C:\\Users\\Henning\\Desktop\\Uni\\Softwareprojektmanagement\\Weka Daten\\SPM_TestdatensatzMittel_2017.csv";
+	private String dataDir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
+	private Wekabuilder w;
 	
 	@Before
 	public void setUp() {
