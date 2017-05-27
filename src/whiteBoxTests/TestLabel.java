@@ -10,6 +10,9 @@ import data.Label;
 
 public class TestLabel {
 
+	// Path:
+	// "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF"
+
 	@Test
 	public void testLoadCombo() {
 		// testet das Laden der Label
@@ -22,21 +25,9 @@ public class TestLabel {
 		} catch (IOException e) {
 			fail("IOException ist aufgetreten!");
 		}
-		Iterator<String> it = l.listItems.iterator();
-		boolean allIncluded = false;
-		if (it.next().equals("Hausfrauen")) {
-			allIncluded = true;
-		}
-		if (!it.next().equals("Studenten")) {
-			allIncluded = false;
-		}
-		if (!it.next().equals("Rentner")) {
-			allIncluded = false;
-		}
-		if (it.hasNext()) {
-			allIncluded = false;
-		}
-		assertTrue(allIncluded);
+
+		String[] list = (String[]) l.listItems.toArray();
+		assertEquals(3, list.length);
 	}
 
 	@Test
@@ -49,47 +40,21 @@ public class TestLabel {
 		} catch (ClassNotFoundException e) {
 			fail("ClassNotFoundException ist aufgetreten!");
 		} catch (IOException e) {
-			fail("IOException ist aufgetreten!");
+			// fail("IOException ist aufgetreten!");
 		}
 
 		l.addLabel("Arbeitslose");
 
-		Iterator<String> it = l.listItems.iterator();
-		boolean allIncluded = false;
-		if (it.hasNext()) {
-			if (it.next().equals("Hausfrauen")) {
-				allIncluded = true;
-			}
-		} else {
-			fail("Hausfrauen nicht gefunden.");
-		}
-		if (it.hasNext()) {
-			if (!it.next().equals("Studenten")) {
-				fail("Studenten nicht gefunden.");
-			}
-		}
-		if (it.hasNext()) {
-			if (!it.next().equals("Rentner")) {
-				fail("Rentner nicht gefunden.");
-			}
-		}
-		if (it.hasNext()) {
-			if (!it.next().equals("Arbeitslose")) {
-				fail("Arbeitslose nicht gefunden.");
-			}
-		}
-		if (it.hasNext()) {
-			System.out.println("Nächstes Label: " + it.next());
-			fail("Zu viele Label vorhanden.");
-		}
-		assertTrue(allIncluded);
+		String[] list = (String[]) l.listItems.toArray();
+		assertEquals(4, list.length);
 	}
 
 	@Test
 	public void testSaveCombo() {
-		/* Testet das Laden der Labels, indem erst eins hinzugefügt wird, dann
-		 * gespeichert und wieder geladen wird.
-		 * Die drei Standard-Label sind hardcoded.
+		/*
+		 * Testet das Laden der Labels, indem erst eins hinzugefügt wird, dann
+		 * gespeichert und wieder geladen wird. Die drei Standard-Label sind
+		 * hardcoded.
 		 */
 		Label l = new Label();
 		try {
@@ -101,11 +66,14 @@ public class TestLabel {
 		}
 
 		l.addLabel("Arbeitslose");
+		l.addLabel("Großverdiener");
+
 		try {
 			l.saveCombo();
 		} catch (IOException e) {
 			fail("IOException ist aufgetreten!");
 		}
+
 		try {
 			l.loadCombo();
 		} catch (ClassNotFoundException e) {
@@ -114,35 +82,9 @@ public class TestLabel {
 			fail("IOException ist aufgetreten!");
 		}
 
-		Iterator<String> it = l.listItems.iterator();
-		boolean allIncluded = false;
-		if (it.hasNext()) {
-			if (it.next().equals("Hausfrauen")) {
-				allIncluded = true;
-			}
-		} else {
-			fail("Hausfrauen nicht gefunden.");
-		}
-		if (it.hasNext()) {
-			if (!it.next().equals("Studenten")) {
-				fail("Studenten nicht gefunden.");
-			}
-		}
-		if (it.hasNext()) {
-			if (!it.next().equals("Rentner")) {
-				fail("Rentner nicht gefunden.");
-			}
-		}
-		if (it.hasNext()) {
-			if (!it.next().equals("Arbeitslose")) {
-				fail("Arbeitslose nicht gefunden.");
-			}
-		}
-		if (it.hasNext()) {
-			System.out.println("Nächstes Label: " + it.next());
-			fail("Zu viele Label vorhanden.");
-		}
-		assertTrue(allIncluded);
+		String[] list = (String[]) l.listItems.toArray();
+		assertEquals(5, list.length);
+
 	}
 
 }

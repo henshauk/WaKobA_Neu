@@ -95,10 +95,11 @@ public class Wekabuilder {
 /**
  *  Speichert das Ergebnis einer Analyse ab
  * 
- * @param res  - das zu speichernde Ergebnis
+ * @param res - das zu speichernde Ergebnis
+ * @return    - Name des gespeicherten Objekts
  * @throws IOException
  */
-	public void storeResult(Result res) throws IOException {
+	public String storeResult(Result res) throws IOException {
 
 		File store = new File(storeDir);
 		if (!store.exists()) {
@@ -120,6 +121,8 @@ public class Wekabuilder {
 		}finally{
 			fos.close();
 		}
+		
+		return storedata;
 	}
 
 /**
