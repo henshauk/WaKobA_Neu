@@ -27,51 +27,51 @@ public class AuthentificationServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	/*protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html;charset=UTF-8");
-		Authentifi.setFile(getServletConfig().getServletContext().getRealPath("/WEB-INF"));
-        
-		String user = request.getParameter("user");
-		String pass = request.getParameter("pass");
-		
-		System.out.println(Authentifi.newUser("user", "pass"));
-		Authentifi.newUser("1", "pass1");
-		Authentifi.newUser("1", "pass1");
-		Authentifi.newUser("1", "pass1");
-		Authentifi.newUser("4", "pass4");
-		Authentifi.newUser("5", "pass5");
-		
-		
-		// System.out.println(this.getServletContext().getRealPath("/"));
-		
-		Authentifi.rmUser("1");
-		Authentifi.rmUser("2");
-		Authentifi.rmUser("5");
-		System.out.println(Authentifi.rmUser("2"));
-		PrintWriter out = response.getWriter();
-		
-		boolean login = Authentifi.valid(user, pass);
-		
-		Authentifi.userAusgeben();
-        
-        if(login==true){
-            out.println("Welcome user");
-        }
-        else if(login == false){
-        	out.println("Benutzername oder Passwort Falsch!");
-        }
-        response.sendRedirect("upload.html");
-		
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+		// doGet sollte nicht verwendet werden zur Authentifizierung (Passwort würde in der URL stehen)
+	}*/
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		response.setContentType("text/html;charset=UTF-8");
+
+		//Authentifi.deleteFile(getServletConfig().getServletContext().getRealPath("/WEB-INF"));
+		Authentifi.setFile(getServletConfig().getServletContext().getRealPath("/WEB-INF"));
+		
+		//Authentifi.rmAllUser();
+		//System.out.println(Authentifi.newUser("admin", "admin"));
+		
+		System.out.println();System.out.println("Login.txt:");
+		Authentifi.userAusgeben();
+		System.out.println("Login.txt Ende");System.out.println();
+		
+		
+		String user = request.getParameter("user");
+		String pass = request.getParameter("pass");
+		boolean login = Authentifi.valid(user, pass);
+		
+
+		//PrintWriter out = response.getWriter();
+		
+		
+		
+		//Authentifi.userAusgeben();
+        
+        if(login==true){
+            System.out.println("Welcome user");
+            response.sendRedirect("upload.html");
+        }
+        else if(login == false){
+        	response.sendRedirect("login.html");
+        	System.out.println("Benutzername oder Passwort Falsch!");
+        }
+        
+		
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 }

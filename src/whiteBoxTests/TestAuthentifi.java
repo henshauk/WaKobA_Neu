@@ -122,7 +122,7 @@ public class TestAuthentifi {
         String[] users = {"user1", "user2"};
         String[] passwords = {"pw1", "pw2"};
         try {
-            Authentifi.writeLogins(users, passwords);
+            Authentifi.writeLogins();
         } catch (IOException e) {
             fail("IOException ist aufgetreten!");
         }
