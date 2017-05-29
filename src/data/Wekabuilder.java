@@ -177,6 +177,10 @@ public class Wekabuilder {
 		
 		File store = new File(storeDir);
 		String[] files = store.list();
+		if(files.length == 0){
+			files = new String[1];
+			files[0] = "dummy";
+		}
 		int diff = files.length - resultsToSave;
 		 for(String s: files){
 			 	if(diff > 0){

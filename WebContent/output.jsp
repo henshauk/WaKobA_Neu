@@ -5,10 +5,13 @@
 <%
 	//  für die upload Seite
 	StringBuffer auswertungen = new StringBuffer();
-	List<String> stored = Wekabuilder.resultNames;
+	List<String> stored = new ArrayList<String>();
+	stored = Wekabuilder.resultNames;
 
 	for (String name : stored) {
+		if(!name.equals("dummy")){
 		auswertungen.append("<li><a href=output.jsp?store=" + name + ">" + name + "</a></li>");
+		}
 	}
 	//
 
