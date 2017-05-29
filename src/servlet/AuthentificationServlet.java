@@ -43,7 +43,7 @@ public class AuthentificationServlet extends HttpServlet {
 		Authentifi.setFile(getServletConfig().getServletContext().getRealPath("/WEB-INF"));
 		
 		//Authentifi.rmAllUser();
-		//System.out.println(Authentifi.newUser("admin", "admin"));
+		System.out.println(Authentifi.newUser("admin", "admin"));
 		
 		System.out.println();System.out.println("Login.txt:");
 		Authentifi.userAusgeben();
