@@ -2,6 +2,7 @@ package whiteBoxTests;
 
 import data.Authentifi;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -20,7 +21,7 @@ public class TestAuthentifi {
 
     private File f;
 
-    private String dir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
+    private String dir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
     private String file = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF\\login.txt";
     private FileWriter fw;
 
@@ -29,18 +30,23 @@ public class TestAuthentifi {
         System.setOut(new PrintStream(outContent));
 
         f = new File(file);
-        try {
-            fw = new FileWriter(f);
-        } catch (IOException e) {
-            fail("IOException ist aufgetreten!");
-        }
-        try {
-            fw.write("user" + System.getProperty("line.separator") + "pass"
-                    + System.getProperty("line.separator"));
-        } catch (IOException e) {
-            fail("IOException ist aufgetreten!");
-        }
-        fw.close();
+      
+        if(!f.exists())
+        	f.createNewFile();
+        	
+        FileWriter fw = new FileWriter(f);
+		BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.write("1"); // Schreibe Name
+		bw.newLine();
+		bw.write("pass1"); // Schreibe PW in nächste Zeile
+		bw.newLine();
+		
+		bw.write("2"); // Schreibe Name
+		bw.newLine();
+		bw.write("pass2"); // Schreibe PW in nächste Zeile
+		bw.newLine();
+
     }
 
     @After
@@ -64,11 +70,12 @@ public class TestAuthentifi {
     }
 
     @Test
-    public void testValidGood() {
+    public void testValidGood() throws IOException {
         // testet den Login mit gültigen Daten
-        // ist davon abhängig, ob der FileWriter offen ist -> wieso?
+    	Authentifi.setFile(dir);
+    	Authentifi.readLogins();
         String user = "user";
-        String pass = "pass";
+        String pass = "pw";
         boolean accessGranted = false;
         try {
             accessGranted = Authentifi.valid(user, pass);
@@ -82,6 +89,8 @@ public class TestAuthentifi {
     public void testValidBadUsername() {
         // testet den Login mit nichtexistentem Usernamen und Passwort,
         // das von jemand anderem benutzt wird
+        Authentifi.setFile(dir);
+
         String user = "test";
         String pass = "pass";
         boolean accessGranted = true;
@@ -96,6 +105,8 @@ public class TestAuthentifi {
     @Test
     public void testValidBadPassword() {
         // testet den Login mit gültigem Usernamen, aber falschem Passwort
+        Authentifi.setFile(dir);
+
         String user = "user";
         String pass = "testpw";
         boolean accessGranted = true;
@@ -109,6 +120,8 @@ public class TestAuthentifi {
 
     @Ignore
     public void testReadLogins() {
+        Authentifi.setFile(dir);
+
         try {
             Authentifi.readLogins();
         } catch (IOException e) {
@@ -133,6 +146,8 @@ public class TestAuthentifi {
     @Test
     public void testNewUserGood() {
         // legt einen neuen Benutzer an, dessen Username noch nicht existiert
+        Authentifi.setFile(dir);
+
         String user = "newUser";
         String pw = "password";
         try {
@@ -147,46 +162,25 @@ public class TestAuthentifi {
     public void testNewUserBadUsername() {
         // versucht einen neuen Nutzer anzulegen, dessen Username bereits
         // vergeben ist
+        Authentifi.setFile(dir);
+
         String user = "user";
         String pw = "pw";
         try {
             Authentifi.newUser(user, pw);
             String output = Authentifi.newUser(user, pw);
-            assertEquals(output, "Nutzername " + user + " Bereits vergeben!");
+            assertEquals(output, "Benutzer " + user + " konnte nicht angelegt werden! (Bereits vorhanden (newUser) )");
         } catch (IOException e) {
             fail("IOException ist aufgetreten");
         }
     }
 
     @Test
-    public void testNewUserMaxUsers() {
-        // versucht einen neuen Nutzer anzulegen, aber es gibt bereits eine
-        // maximale Anzahl an Nutzern
-        boolean failed = false;
-        String pw = "pw";
-        for (int i = 0; i < 1; i++) {
-            String s = "user" + String.valueOf(i);
-            try {
-                Authentifi.newUser(s, pw);
-                // readLogins() wirft NullPointerException
-            } catch (IOException e) {
-                fail("IOException ist aufgetreten!");
-            }
-            if (outContent.equals(
-                    "Benutzer " + s + " konnte nicht angelegt werden!")) {
-                failed = true;
-                break;
-            } else {
-                outContent.reset();
-            }
-        }
-        assertTrue(failed);
-    }
-
-    @Test
-    public void testRmUserGood() {
+    public void testRmUserGood() throws IOException {
         // readLogins() wirft gelegentlich NullPointerExceptions
+    	//Authentifi.setFile(dir);
         String user = "usertest";
+        Authentifi.readLogins();
         try {
             Authentifi.newUser(user, "pass");
         } catch (IOException ex) {
@@ -195,7 +189,7 @@ public class TestAuthentifi {
         }
         try {
             assertEquals("Benutzer " + user + " wurde erfolgreich entfernt!",
-                    Authentifi.rmUser(user));
+                    Authentifi.rmUser("1"));
         } catch (IOException e) {
             fail("IOException ist aufgetreten!");
         }
@@ -205,7 +199,7 @@ public class TestAuthentifi {
     public void testRmUserBad() {
         String user = "userNichtExistent";
         try {
-            assertEquals("Benutzer " + user + " konnte nicht gelöscht werden",
+            assertEquals("Benutzer " + user + " konnte nicht gelöscht werden (nicht vorhanden)",
                     Authentifi.rmUser(user));
         } catch (IOException e) {
             fail("IOException ist aufgetreten!");
