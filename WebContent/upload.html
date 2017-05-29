@@ -14,6 +14,10 @@
 	<!-- Javascript -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="js/kickstart.js"></script>
+	<script>
+	imgOn = new Image;
+	imgOn.src = "animation.gif";
+	</script>
 </head>
 <body>
 <div class="grid">
@@ -87,7 +91,7 @@
 			
 			<p>
 					<button type="reset" value="Reset">Zurücksetzen</button>
-					<button type="submit" value="Submit">Analyse Starten</button>
+					<button type="submit" value="Submit" onClick="document.img.src=imgOn.src;">Analyse Starten </button>
 			</p>
 				</form>
 		</div>
