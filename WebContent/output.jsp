@@ -148,34 +148,45 @@
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <title>Warenkorb Analyse</title>
 </head>
 
 <body>
 	<h4 align=center>Ergebnis der Analyse</h4>
+	
 
-	<div class="grid">
-		<ul class="tabs left">
-			<li><a href="#grafik">Grafisch</a></li>
-			<li><a href="#tabelle">Tabelle</a></li>
-		</ul>
+<div class="grid">	
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#grafik">Grafik</a></li>
+ 	 	<li><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
+	</ul>
 
-		<div id="grafik" class="tab-content">
-			<table cellpadding="">
+<div class="tab-content">
+  	<div id="grafik" class="tab-pane fade in active">
+		<table>
 				<thead></thead>
 				<tbody>
 					<%=sB.toString()%>
 				</tbody>
-			</table>
-		</div>
-		<div id="tabelle" class="tab-content">
-			Hallo Dude kein Tab da
-			<table>
+		</table>
+  	</div>
+  	<div id="tabelle" class="tab-pane fade">
+		<table>
+			<thead></thead>
+			<tbody>
 				<%=table.toString()%>
-			</table>
-			<%=auswertungen.toString()%>
-		</div>
-	</div>
+			</tbody>
+		</table>
+		<%=auswertungen.toString()%>
+  	</div>
+</div>
+</div>
+	
 </body>
 </html>
