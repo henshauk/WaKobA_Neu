@@ -8,7 +8,9 @@
 	List<String> stored = Wekabuilder.resultNames;
 
 	for (String name : stored) {
+		if(!name.equals("dummy")){
 		auswertungen.append("<li><a href=output.jsp?store=" + name + ">" + name + "</a></li>");
+		}
 	}
 	//
 
