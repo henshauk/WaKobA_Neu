@@ -23,7 +23,6 @@ public class TestAuthentifi {
 
     private String dir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
     private String file = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF\\login.txt";
-    private FileWriter fw;
 
     @Before
     public void setUp() throws IOException {
@@ -31,9 +30,9 @@ public class TestAuthentifi {
 
         f = new File(file);
       
-        if(!f.exists())
-        	f.createNewFile();
-        	
+        //if(!f.exists())
+        	//f.createNewFile();
+        /*	
         FileWriter fw = new FileWriter(f);
 		BufferedWriter bw = new BufferedWriter(fw);
         
@@ -47,7 +46,15 @@ public class TestAuthentifi {
 		bw.write("pass2"); // Schreibe PW in nächste Zeile
 		bw.newLine();
 
-    }
+		bw.close();
+		*/
+ 
+        PrintStream fileStream = new PrintStream(f);
+        fileStream.println("user");
+        fileStream.println("pw");
+        fileStream.close();
+        
+    }    
 
     @After
     public void cleanUp() {
@@ -57,7 +64,7 @@ public class TestAuthentifi {
     }
 
     // setFile() ohne existierende Datei muss in einer separaten Klasse getestet
-    // werden, weil @before anders sein muss
+    // werden, weil die Datei nicht in @before erstellt werden sollte.
 
     @Test
     public void testSetFileExisting() {
@@ -144,12 +151,17 @@ public class TestAuthentifi {
     }
 
     @Test
-    public void testNewUserGood() {
+    public void testNewUserGood() throws IOException {
         // legt einen neuen Benutzer an, dessen Username noch nicht existiert
         Authentifi.setFile(dir);
-
+        Authentifi.readLogins();
+        
         String user = "newUser";
         String pw = "password";
+        PrintStream fileStream = new PrintStream(f);
+        fileStream.println("user");
+        fileStream.println("pw");
+        fileStream.close();
         try {
             String output = Authentifi.newUser(user, pw);
             assertEquals(output, "Benutzer " + user + " erfolgreich angelegt!");
@@ -164,7 +176,7 @@ public class TestAuthentifi {
         // vergeben ist
         Authentifi.setFile(dir);
 
-        String user = "user";
+        String user = "usertest";
         String pw = "pw";
         try {
             Authentifi.newUser(user, pw);
@@ -177,8 +189,7 @@ public class TestAuthentifi {
 
     @Test
     public void testRmUserGood() throws IOException {
-        // readLogins() wirft gelegentlich NullPointerExceptions
-    	//Authentifi.setFile(dir);
+    	Authentifi.setFile(dir);
         String user = "usertest";
         Authentifi.readLogins();
         try {
