@@ -49,10 +49,11 @@ public class AuthentificationServlet extends HttpServlet {
 		Authentifi.userAusgeben();
 		System.out.println("Login.txt Ende");System.out.println();
 		
+		System.out.println(request.getSession().getId());
 		
 		String user = request.getParameter("user");
 		String pass = request.getParameter("pass");
-		boolean login = Authentifi.valid(user, pass);
+		boolean login = Authentifi.valid(user, pass, request.getSession().getId());
 		
 
 		//PrintWriter out = response.getWriter();

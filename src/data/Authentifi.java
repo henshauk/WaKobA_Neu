@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class Authentifi {
 	static File f;
-	public static boolean berechtigt = false;
+	public static HashMap<String, Boolean> berechtigt = new HashMap<String, Boolean>();
 	private static HashMap<String, String> userpass = new HashMap<String, String>();
 
 	public static void writeLogins() throws IOException {
@@ -107,16 +107,24 @@ public class Authentifi {
 		writeLogins();
 	}
 
-	public static boolean valid(String user, String pass) throws IOException {
+	public static boolean valid(String user, String pass, String id) throws IOException {
 		readLogins();
 		if (userpass.containsKey(user)) {
 			if (userpass.get(user).equals(pass)){
-				berechtigt = true;
+				berechtigt.put(id, true);
 				return true;
 			}
 			else
 				return false;
 		} else
+			return false;
+	}
+	
+	public static boolean logout(String id){
+		if(berechtigt.containsKey(id)){
+		berechtigt.remove(id);
+		return true;
+		}else 
 			return false;
 	}
 

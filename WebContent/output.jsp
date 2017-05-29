@@ -2,7 +2,17 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*"%>
 <%@ page import="data.Wekabuilder"%>
+<%@ page import="data.Authentifi"%>
 <%
+
+	try {
+	if(!Authentifi.berechtigt.get(request.getSession().getId())){
+		response.sendRedirect("login.html");
+	}
+	}catch (Exception e){
+		System.out.println("----- berechtigt Exception ------");
+		response.sendRedirect("login.html");		
+	}
 	//  für die upload Seite
 	StringBuffer auswertungen = new StringBuffer();
 	List<String> stored = new ArrayList<String>();

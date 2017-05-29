@@ -1,5 +1,6 @@
 package servlet;
 
+import data.Authentifi;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -62,6 +63,7 @@ public class DataServlet extends HttpServlet {
 		String algorithmus = "";
 		int anzahlCluster = 0;
 		List<Integer> kategorien = new ArrayList<Integer>();
+		System.out.println(Authentifi.berechtigt);
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 
