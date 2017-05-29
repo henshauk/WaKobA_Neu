@@ -58,6 +58,10 @@ public class Wekabuilder {
 	public Wekabuilder(String file, String dataDir) throws Exception {
 		// CSV-Datei laden
 		storeDir = dataDir + File.separator + "store";
+		File store = new File (storeDir);
+		if (!store.exists()) {
+			store.mkdir();
+		}
 		diagrammData = new ArrayList<List<String>>();
 		
 		resultNames = new ArrayList<String>();
@@ -101,10 +105,6 @@ public class Wekabuilder {
  */
 	public String storeResult(Result res) throws IOException {
 
-		File store = new File(storeDir);
-		if (!store.exists()) {
-			store.mkdir();
-		}
 
 		Date d = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
