@@ -27,10 +27,13 @@ public class AuthentificationServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	/*protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet sollte nicht verwendet werden zur Authentifizierung (Passwort würde in der URL stehen)
-	}*/
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id = request.getSession().getId();
+		if(Authentifi.berechtigt.containsKey(id)){
+			Authentifi.logout(id);
+			response.sendRedirect("login.html");
+		}
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

@@ -4,14 +4,13 @@
 <%@ page import="data.Wekabuilder"%>
 <%@ page import="data.Authentifi"%>
 <%
-
 	try {
-	if(!Authentifi.berechtigt.get(request.getSession().getId())){
-		response.sendRedirect("login.html");
-	}
-	}catch (Exception e){
+		if (!Authentifi.berechtigt.get(request.getSession().getId())) {
+			response.sendRedirect("login.html");
+		}
+	} catch (Exception e) {
 		System.out.println("----- berechtigt Exception ------");
-		response.sendRedirect("login.html");		
+		response.sendRedirect("login.html");
 	}
 	//  für die upload Seite
 	StringBuffer auswertungen = new StringBuffer();
@@ -19,8 +18,8 @@
 	stored = Wekabuilder.resultNames;
 
 	for (String name : stored) {
-		if(!name.equals("dummy")){
-		auswertungen.append("<li><a href=output.jsp?store=" + name + ">" + name + "</a></li>");
+		if (!name.equals("dummy")) {
+			auswertungen.append("<li><a href=output.jsp?store=" + name + ">" + name + "</a></li>");
 		}
 	}
 	//
@@ -55,7 +54,6 @@
 		table.append("</tr>");
 		currentRow++;
 	}
-	
 
 	List<String> käuferdaten = new LinkedList<String>(); //  Vergleichsliste um die Daten 
 	käuferdaten.add("Geschlecht"); //  zwischen Person und Ware zu trennen
@@ -70,10 +68,9 @@
 	käuferdaten.add("Einkaufsuhrzeit");
 	käuferdaten.add("Einkaufssumme");
 
-
 	// Pfad
-	System.out.println("JSP-Kontext: "+getServletContext().getRealPath("/WEB-INF"));
-	
+	System.out.println("JSP-Kontext: " + getServletContext().getRealPath("/WEB-INF"));
+
 	Set<String> lab = new HashSet<String>();
 	lab.add("Studenten");
 	lab.add("Rentner");
@@ -161,46 +158,54 @@
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
-  <meta charset="utf-8">
+<meta charset="utf-8">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <title>Warenkorb Analyse</title>
 </head>
 
 <body>
 	<h4 align=center>Ergebnis der Analyse</h4>
-	
 
-<div class="grid">	
-	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#grafik">Grafik</a></li>
- 	 	<li><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
-	</ul>
 
-<div class="tab-content">
-  	<div id="grafik" class="tab-pane fade in active">
-		<table>
-				<thead></thead>
-				<tbody>
-					<%=sB.toString()%>
-				</tbody>
-		</table>
-  	</div>
-  	<div id="tabelle" class="tab-pane fade">
-		<table>
-			<thead></thead>
-			<tbody>
-				<%=table.toString()%>
-			</tbody>
-		</table>
-		<%=auswertungen.toString()%>
-  	</div>
-</div>
-</div>
-	
-	
+	<div class="grid">
+
+		<ul class="nav nav-tabs">
+			<li class="active"><a data-toggle="tab" href="#grafik">Grafik</a></li>
+			<li><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
+			<li>
+				<form action=AuthentificationServlet method=GET>
+					<button type="submit" value="Submit">Logout</button>
+				</form>
+			</li>
+		</ul>
+
+		<div class="tab-content">
+			<div id="grafik" class="tab-pane fade in active">
+				<table>
+					<thead></thead>
+					<tbody>
+						<%=sB.toString()%>
+					</tbody>
+				</table>
+			</div>
+			<div id="tabelle" class="tab-pane fade">
+				<table>
+					<thead></thead>
+					<tbody>
+						<%=table.toString()%>
+					</tbody>
+				</table>
+				<%=auswertungen.toString()%>
+			</div>
+		</div>
+	</div>
+
+
 </body>
 </html>
