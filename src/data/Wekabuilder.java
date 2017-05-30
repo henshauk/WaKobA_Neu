@@ -55,6 +55,12 @@ public class Wekabuilder {
 										 "Milchprodukte","Backwaren","Obst/Gemüse","Spirituosen","Tiernahrung",
 										 "Bier","Frischfleisch","Drogerieartikel","Konserven","Kaffee/Tee","Süßigkeiten"};
 	
+	/**
+	 * Zusatzkonstruktor für das gesonderte Erstellen der Liste resultNames,
+	 * um die gespeicherten Ergebnisse abrufen zu können
+	 * 
+	 * @param dataDir - Pfad des WEB-INF Verzeichnisses
+	 */
 	public Wekabuilder(String dataDir){
 		storeDir = dataDir + File.separator + "store";
 		File store = new File (storeDir);
@@ -84,7 +90,6 @@ public class Wekabuilder {
 		File csv = new File(file);
 		loader.setSource(csv);
 		data = loader.getDataSet();
-//		System.out.println("lösche csv: "+csv.delete());
 
 		String arffDat = file + ".arff";
 

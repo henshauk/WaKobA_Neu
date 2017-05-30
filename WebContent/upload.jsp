@@ -3,7 +3,7 @@
 <%@ page import="data.*"%>
 <%@ page import="java.util.*"%>
 <%
-	try {
+	try {				//  login prüfen
 		if (!Authentifi.berechtigt.get(request.getSession().getId())) {
 			response.sendRedirect("login.html");
 		}

@@ -120,6 +120,12 @@ public class Authentifi {
 			return false;
 	}
 	
+	/**
+	 * Die Session id des Nutzers wird aus der Map entfernt um die berechtigung zu entziehen
+	 * 
+	 * @param id - Session id des Nutzers der sich ausloggen möchte
+	 * @return
+	 */
 	public static boolean logout(String id){
 		if(berechtigt.containsKey(id)){
 		berechtigt.remove(id);

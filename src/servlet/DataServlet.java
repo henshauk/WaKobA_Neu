@@ -26,6 +26,8 @@ import org.apache.commons.lang.ArrayUtils;
 import data.Wekabuilder;
 
 /**
+ * Verarbeiten der Upload Daten und starten des Weka Algorithmus 
+ * 
  * Servlet implementation class DataServlet
  */
 @WebServlet("/DataServlet")
@@ -67,10 +69,9 @@ public class DataServlet extends HttpServlet {
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 
-			// Create a factory for disk-based file items
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 
-			// read ServletPath and build upload repository
+			// ServletPath auslesen und upload Verzeichnis erstellen falls nicht vorhanden
 			ServletContext servletContext = this.getServletConfig().getServletContext();
 			String servletPath = servletContext.getRealPath("/WEB-INF");
 			String uploadPath = servletPath + File.separator + UPLOAD_DIRECTORY;
@@ -80,11 +81,11 @@ public class DataServlet extends HttpServlet {
 			}
 			factory.setRepository(repository);
 	
-			// Create a new file upload handler
+			//  upload handler erstellen
 			ServletFileUpload upload = new ServletFileUpload(factory);
 			String filePath = null;
 
-			// Parse the request
+			// Anfrage parsen um items abzufragen
 			try {
 				List<FileItem> items = upload.parseRequest(request);
 				Iterator<FileItem> iter = items.iterator();
@@ -105,7 +106,7 @@ public class DataServlet extends HttpServlet {
 							File storeFile = new File(filePath);
 							System.out.println("Upload " + filePath);
 
-							// saves the file on disk
+							// datei wird hochgeladen
 							item.write(storeFile);
 						}
 					}
@@ -125,7 +126,6 @@ public class DataServlet extends HttpServlet {
 						}
 					}
 
-					// System.out.println("input " + item.getFieldName());				 
 				}
 				
 				if(sizeInBytes > 0){
@@ -159,11 +159,9 @@ public class DataServlet extends HttpServlet {
 					
 				 
 			} catch (FileUploadException e) {
-				// TODO Auto-generated catch block
 				System.err.println("parse Request failed");
 				e.printStackTrace();
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}

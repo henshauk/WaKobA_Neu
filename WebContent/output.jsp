@@ -172,8 +172,8 @@
 						<li><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
 					</ul>
 				</td>
-				<td align=right></td>
-				<td><ul class="nav nav-tabs">
+				<td></td>
+				<td align=right><ul class="nav nav-tabs">
 						<li><form action=upload.jsp>
 								<button type="submit" value="Submit">Neue Analyse</button>
 							</form></li>
@@ -193,7 +193,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div id="tabelle" class="tab-pane fade">
+			<div id="tabelle" class="tab-pane fade" style="overflow-y:auto ">
 				<table>
 					<thead></thead>
 					<tbody>
