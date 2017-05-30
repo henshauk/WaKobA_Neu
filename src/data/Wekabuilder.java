@@ -121,7 +121,7 @@ public class Wekabuilder {
  * @return    - Name des gespeicherten Objekts
  * @throws IOException
  */
-	public String storeResult(Result res) throws IOException {
+	public synchronized String storeResult(Result res) throws IOException {
 
 
 		Date d = new Date();
@@ -172,6 +172,25 @@ public class Wekabuilder {
 	
 	}
 	
+	private void builtList(){	// Auflisten der namen zu den gespeiccherten Ergebnissen
+		
+		File store = new File(storeDir);
+		String[] files = store.list();
+		if(files.length == 0){
+			files = new String[1];
+			files[0] = "dummy";
+		}
+		int diff = files.length - resultsToSave;
+		 for(String s: files){
+			 	if(diff > 0){
+			 		File current = new File(storeDir + File.separator + s);
+			 		current.delete();
+			 		diff--;
+			 	}else {
+			    resultNames.add(s);
+			 	}
+			}
+	}
 	
 
 
@@ -191,25 +210,6 @@ public class Wekabuilder {
 	 *  Füllt die Liste 'resultNames' mit den Namen der gespeicherten Ergebnisse
 	 *  Zusätlich werden Ergebnisse gelöscht die über der festgelegten Anzahl liegen
 	 */
-	private void builtList(){
-		
-		File store = new File(storeDir);
-		String[] files = store.list();
-		if(files.length == 0){
-			files = new String[1];
-			files[0] = "dummy";
-		}
-		int diff = files.length - resultsToSave;
-		 for(String s: files){
-			 	if(diff > 0){
-			 		File current = new File(storeDir + File.separator + s);
-			 		current.delete();
-			 		diff--;
-			 	}else {
-			    resultNames.add(s);
-			 	}
-			}
-	}
 
 	public void buildFF(int anzahl) throws Exception {
 		
@@ -252,13 +252,6 @@ public class Wekabuilder {
 			kat.add(katNamen[array[i]]);			// fügt die Namen der gewählten Kategorien hinzu
 		}
 		diagrammData.add(0,kat);		// fügt die Liste der gewählten Kategorien den Daten hinzu
-	}
-
-	public void buildEM(int anzahl) throws Exception {
-		EM em = new EM();
-		em.setNumClusters(anzahl);
-		em.buildClusterer(trainingSubset);
-		System.out.println(em);
 	}
 
 }

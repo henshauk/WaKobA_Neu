@@ -202,6 +202,13 @@
 				</table>
 			</div>
 		</div>
+		<footer>
+			<p align="center">Entwickelt von V-Men Software für KaufDort</p>
+			<p align="center">
+				<img src="images/KaufDort_V1.png" width="150" height="150" /> <img
+					src="images/V-Men_V1.png" width="150" height="150" />
+			</p>
+		</footer>
 	</div>
 
 

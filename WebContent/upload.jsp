@@ -3,7 +3,7 @@
 <%@ page import="data.*"%>
 <%@ page import="java.util.*"%>
 <%
-	try {				//  login prüfen
+	try { //  login prüfen
 		if (!Authentifi.berechtigt.get(request.getSession().getId())) {
 			response.sendRedirect("login.html");
 		}
@@ -51,19 +51,32 @@
 <script>
 	imgOn = new Image;
 	imgOn.src = "animation.gif";
-	</script>
+</script>
 </head>
 <body>
 	<div class="grid">
-		<div class=col_8><header>
-			<h4>Warenkorbanalyse Kaufdort</h4>	
-		</header></div>
+		<div class=col_8>
+			<header>
+				<h4>Warenkorbanalyse Kaufdort</h4>
+			</header>
+		</div>
 		<div class=col_4>
-<table><tr><td></td><td align=right><form action=AuthentificationServlet method=GET>
-								<button type="submit" value="Submit">Logout</button>
-							</form></td></tr></table></div>
+			<table>
+				<tr>
+					<td></td>
+					<td align=right><form action=AuthentificationServlet
+							method=GET>
+							<button type="submit" value="Submit">Logout</button>
+						</form>
+						<form action=Daten.html>
+							<button type="submit" value="Submit">Eingabe</button>
+						</form></td>
+				</tr>
+			</table>
+		</div>
 		<section>
 			<!-- Tabs Left -->
+
 			<ul class="tabs left">
 				<li><a href="#new">Neue Analyse</a></li>
 				<li><a href="#last">Letzte Auswertungen</a></li>
@@ -83,14 +96,12 @@
 							<p>Art der Analyse / den Algorithmus auswählen</p>
 							<p>
 								<!-- Radio -->
-								<input type="radio" name="radio" id="radio1" onclick=\
-									"getAnswer('a') value="a" checked /> <label for="radio1"
-									class="inline">K-Means-Algorithmus</label>
+								<input type="radio" name="radio" id="radio1" value="a" checked />
+								<label for="radio1" class="inline">K-Means-Algorithmus</label>
 							</p>
 							<p>
-								<input type="radio" name="radio" id="radio2" onclick=\
-									"getAnswer('b') value="b" /> <label for="radio1"
-									class="inline">Farthest-First-Algorithmus</label>
+								<input type="radio" name="radio" id="radio2" value="b" /> <label
+									for="radio1" class="inline">Farthest-First-Algorithmus</label>
 							</p>
 						</li>
 						<li>

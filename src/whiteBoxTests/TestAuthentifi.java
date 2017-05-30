@@ -66,18 +66,7 @@ public class TestAuthentifi {
 		assertNotEquals("create login file" + System.getProperty("line.separator"), outContent.toString());
 	}
 
-	@Test
-	public void testValidGood() throws IOException {
-		// testet den Login mit gültigen Daten
-		Authentifi.setFile(dir);
-
-		String user = "user";
-		String pass = "pw";
-		Authentifi.newUser(user, pass);
-		boolean accessGranted = false;
-		accessGranted = Authentifi.valid(user, pass);
-		assertTrue(accessGranted);
-	}
+	
 
 	@Test
 	public void testValidBadUsername() throws IOException {
@@ -88,27 +77,19 @@ public class TestAuthentifi {
 		String user = "testusername";
 		String pass = "pw";
 		boolean accessGranted = true;
-		try {
-			accessGranted = Authentifi.valid(user, pass);
-		} catch (IOException e) {
-			fail("IOException ist aufgetreten!");
-		}
+		accessGranted = Authentifi.valid(user, pass, "");
 		assertFalse(accessGranted);
 	}
 
 	@Test
-	public void testValidBadPassword() {
+	public void testValidBadPassword() throws IOException {
 		// testet den Login mit gültigem Usernamen, aber falschem Passwort
 		Authentifi.setFile(dir);
 
 		String user = "user";
 		String pass = "testpw";
 		boolean accessGranted = true;
-		try {
-			accessGranted = Authentifi.valid(user, pass);
-		} catch (IOException e) {
-			fail("IOException ist aufgetreten!");
-		}
+		accessGranted = Authentifi.valid(user, pass, "");
 		assertFalse(accessGranted);
 	}
 
@@ -125,48 +106,41 @@ public class TestAuthentifi {
 	}
 
 	@Test
-	public void testNewUserBadUsername() {
+	public void testNewUserBadUsername() throws IOException {
 		// versucht einen neuen Nutzer anzulegen, dessen Username bereits
 		// vergeben ist
 		Authentifi.setFile(dir);
 
 		String user = "usernametest";
 		String pw = "pw";
-		try {
-			Authentifi.newUser(user, pw);
-			String output = Authentifi.newUser(user, pw);
-			assertEquals(output, "Benutzer " + user + " konnte nicht angelegt werden! (Bereits vorhanden (newUser) )");
-		} catch (Exception e) {
-			fail("Exception ist aufgetreten");
-		}
-	}
+		
+		Authentifi.newUser(user, pw);
+		String output = Authentifi.newUser(user, pw);
+		assertEquals(output, "Benutzer " + user + " konnte nicht angelegt werden! (Bereits vorhanden (newUser) )");
+}
 
 	@Test
 	public void testRmUserGood() throws IOException {
 		Authentifi.setFile(dir);
-		String user = "usertest";
+		String user = "UserToRemove";
+		String pw = "pass";
 
-		Authentifi.newUser(user, "pass");
-		assertEquals("Benutzer " + user + " wurde erfolgreich entfernt!", Authentifi.rmUser("1"));
+		assertEquals("Benutzer " + user + " erfolgreich angelegt!", Authentifi.newUser(user, pw));
+		Authentifi.userAusgeben();
+		assertEquals("", outContent);
+		
+		//assertEquals("Benutzer " + user + " wurde erfolgreich entfernt!", Authentifi.rmUser(user));
 	}
 
 	@Test
-	public void testRmUserBad() {
+	public void testRmUserBad() throws IOException {
 		String user = "userNichtExistent";
-		try {
-			assertEquals("Benutzer " + user + " konnte nicht gelöscht werden (nicht vorhanden)",
-					Authentifi.rmUser(user));
-		} catch (IOException e) {
-			fail("IOException ist aufgetreten!");
-		}
+		assertEquals("Benutzer " + user + " konnte nicht gelöscht werden (nicht vorhanden)", Authentifi.rmUser(user));
 	}
 
 	@Test
 	public void testDeleteFile() throws IOException {
-		Authentifi.deleteFile(dir);
-		assertEquals("Login.txt wurde gelöscht.", Authentifi.deleteFile(dir));
-		//Authentifi.deleteFile(dir);
-		//assertEquals("Login.txt konnte nicht gelöscht werden - File nicht vorhanden", Authentifi.deleteFile(dir));
+		assertTrue(Authentifi.deleteFile(dir));
 		
 		//Datei wiederherstellen, genauso wie es in @Before passiert
 		f.createNewFile();
