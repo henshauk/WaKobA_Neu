@@ -19,7 +19,7 @@ public class Authentifi {
 	// HashMap, welche User mit dem dazugehoerigen Passwort beinhaltet
 
 	
-	public static void writeLogins() throws IOException { 
+	public static synchronized void writeLogins() throws IOException { 
 		/**
 		 *  Speichert die HashMap userpass ab.
 		 * 
