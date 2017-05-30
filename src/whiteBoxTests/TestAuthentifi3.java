@@ -50,7 +50,7 @@ public class TestAuthentifi3 {
 		fileStream.close();
 		
 		boolean accessGranted = false;
-		accessGranted = Authentifi.valid(user, pass);
+		accessGranted = Authentifi.valid(user, pass, "");
 		assertTrue(accessGranted);
 	}
 }
