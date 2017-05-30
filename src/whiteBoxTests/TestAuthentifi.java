@@ -121,7 +121,7 @@ public class TestAuthentifi {
 		
 		Authentifi.newUser(user, pw);
 		String output = Authentifi.newUser(user, pw);
-		assertEquals(output, "Benutzer " + user + " konnte nicht angelegt werden! (Bereits vorhanden (newUser) )");
+		assertEquals("Benutzer " + user + " konnte nicht angelegt werden! (Bereits vorhanden (newUser) )", output);
 }
 
 	@Test
@@ -153,17 +153,4 @@ public class TestAuthentifi {
 		assertEquals("Benutzer " + user + " konnte nicht gelöscht werden (nicht vorhanden)", Authentifi.rmUser(user));
 	}
 
-	@Test
-	public void testDeleteFile() throws IOException {
-		assertTrue(Authentifi.deleteFile(dir));
-		
-		//Datei wiederherstellen, genauso wie es in @Before passiert
-		f.createNewFile();
-
-		PrintStream fileStream = new PrintStream(f);
-		fileStream.println("user");
-		fileStream.println("pw");
-		fileStream.close();
-	}
-	
 }

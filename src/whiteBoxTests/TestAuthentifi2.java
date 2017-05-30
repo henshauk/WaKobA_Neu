@@ -41,7 +41,7 @@ public class TestAuthentifi2 {
 		System.setOut(null);
 	}
 
-	@Test
+	@Ignore
 	public void testSetFileNew() throws IOException {
 		if(f.exists()) {
 			//assertTrue(f.exists());
