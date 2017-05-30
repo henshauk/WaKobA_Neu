@@ -1,5 +1,6 @@
 package servlet;
 
+import data.Authentifi;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -25,13 +26,15 @@ import org.apache.commons.lang.ArrayUtils;
 import data.Wekabuilder;
 
 /**
+ * Verarbeiten der Upload Daten und starten des Weka Algorithmus 
+ * 
  * Servlet implementation class DataServlet
  */
 @WebServlet("/DataServlet")
 public class DataServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String UPLOAD_DIRECTORY = "upload";
-
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -47,10 +50,12 @@ public class DataServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.sendRedirect("auswertung.html");
+		response.sendRedirect("output.jsp");
 	}
 
 	/**
+	 *  Verarbeitung der gewünschten Einstellungen inkl. starten Analyse 
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -60,25 +65,31 @@ public class DataServlet extends HttpServlet {
 		String algorithmus = "";
 		int anzahlCluster = 0;
 		List<Integer> kategorien = new ArrayList<Integer>();
+		System.out.println(Authentifi.berechtigt);
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 
-			// Create a factory for disk-based file items
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 
-			// Configure a repository (to ensure a secure temp location is used)
+			// ServletPath auslesen und upload Verzeichnis erstellen falls nicht vorhanden
 			ServletContext servletContext = this.getServletConfig().getServletContext();
-			File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+			String servletPath = servletContext.getRealPath("/WEB-INF");
+			String uploadPath = servletPath + File.separator + UPLOAD_DIRECTORY;
+			File repository = new File (uploadPath);
+			if (!repository.exists()) {
+				repository.mkdir();
+			}
 			factory.setRepository(repository);
-			String path = repository.getAbsolutePath();
-			// Create a new file upload handler
+	
+			//  upload handler erstellen
 			ServletFileUpload upload = new ServletFileUpload(factory);
 			String filePath = null;
 
-			// Parse the request
+			// Anfrage parsen um items abzufragen
 			try {
 				List<FileItem> items = upload.parseRequest(request);
 				Iterator<FileItem> iter = items.iterator();
+				long sizeInBytes = 0;
 				while (iter.hasNext()) {
 					FileItem item = iter.next();
 
@@ -86,16 +97,16 @@ public class DataServlet extends HttpServlet {
 						if (item.getSize() != 0) {
 
 							String fileName = item.getName();
-							long sizeInBytes = item.getSize();
+							sizeInBytes = item.getSize();
 							System.out.println(fileName + " size:" + sizeInBytes);
 
 							Date d = new Date();
 							SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
-							filePath = path + File.separator + ft.format(d) + "__" + fileName;
+							filePath = uploadPath + File.separator + ft.format(d) + "__" + fileName;
 							File storeFile = new File(filePath);
 							System.out.println("Upload " + filePath);
 
-							// saves the file on disk
+							// datei wird hochgeladen
 							item.write(storeFile);
 						}
 					}
@@ -111,22 +122,17 @@ public class DataServlet extends HttpServlet {
 							System.out.println("anzahl: " + anzahlCluster);
 						}
 						if (name.equals("kategorie")) {						
-							kategorien.add(Integer.parseInt(item.getString()));		//add number if checkbox unchecked				
+							kategorien.add(Integer.parseInt(item.getString()));		//add number if checkbox checked				
 						}
 					}
 
-					// System.out.println("input " + item.getFieldName());
-
-
-					
-					 
-
 				}
 				
-				Wekabuilder wb = new Wekabuilder(filePath);
+				if(sizeInBytes > 0){
+				Wekabuilder wb = new Wekabuilder(filePath, servletPath);
 				
-				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()]));
-				 System.out.println(Arrays.toString(kategorienArray));
+				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()])); 
+				 System.out.println("Kategoriefilter: "+Arrays.toString(kategorienArray));
 				 wb.filter(kategorienArray);
 			
 				 if(algorithmus.equals("a")){
@@ -143,25 +149,39 @@ public class DataServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 				 }
-				 else if(algorithmus.equals("c")){
-					 try {
-							wb.buildEM(anzahlCluster);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-				 }
-				
+				 
+				 clearFiles(repository);
+				}
+				else {
+					response.sendRedirect("upload.jsp");
+					return;
+				}
+					
+				 
 			} catch (FileUploadException e) {
-				// TODO Auto-generated catch block
 				System.err.println("parse Request failed");
 				e.printStackTrace();
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 
 		doGet(request, response);
+	}
+	
+	/**
+	 *  Löschen der Upload-Dateien nachdem dass Ergebnis vorliegt
+	 * 
+	 * @param repository  - upload Verzeichnis
+	 */
+	private void clearFiles(File repository){
+		String[] files = repository.list();
+		 for(String s: files){
+			    File currentFile = new File(repository.getPath(),s);
+			    System.out.println(s);
+			    System.out.println("löschen: "+currentFile.delete());
+			    
+			}
 	}
 
 }

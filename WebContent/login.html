@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login - Projekt WaKoBa</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="copyright" content="" />
+<link rel="stylesheet" type="text/css" href="css/kickstart.css"
+	media="all" />
+<!-- KICKSTART -->
+<link rel="stylesheet" type="text/css" href="style.css" media="all" />
+<!-- CUSTOM STYLES -->
+<link rel="stylesheet"
+	href="path/to/font-awesome/css/font-awesome.min.css">
+
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/kickstart.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- KICKSTART -->
+</head>
+<body>
+<h3 align=center>Projekt WaKobA</h3>
+	<h4 align="center">Login</h4>
+	<div class=grid>
+	<div class="col_4"></div>
+	<div class="col_4">
+			<form action="AuthentificationServlet" method="post">
+				<table border="10" align="center">
+					<tr>
+						<td><label for="user">Benutzername:</label>
+						<td><input type="text" name="user"></input>
+					</tr>
+					<tr>
+						<td><label for="pass">Passwort:</label>
+						<td><input type="password" name="pass"></input>
+					</tr>
+					<tr>
+						<td><input type="reset" value="Zurücksetzen">
+						<td><input type="submit" value="Absenden">
+					</tr>
+				</table>
+				<br />
+			</form>
+			</div>
+			<div class="col_4"></div>
+		</div>
+</body>
+</html>
