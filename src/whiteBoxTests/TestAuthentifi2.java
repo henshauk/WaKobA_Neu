@@ -2,8 +2,10 @@ package whiteBoxTests;
 
 import data.Authentifi;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -19,13 +21,19 @@ public class TestAuthentifi2 {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private File f;
-	private String dir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
-	private String file = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF\\login.txt";
+
+	private String path = new File(".").getAbsolutePath();
+	
+	private String dir = path + File.separator + "WebContent" + File.separator + "WEB-INF";
+	private String file = dir + File.separator + "login.txt";
 
 	@Before
 	public void setUpStreams() throws IOException {
 		System.setOut(new PrintStream(outContent));
 		f = new File(file);
+		if(!f.exists()) {
+			f.createNewFile();
+		}
 	}
 
 	@After
@@ -34,15 +42,22 @@ public class TestAuthentifi2 {
 	}
 
 	@Test
-	public void testSetFileNew() {
-		f.delete();
+	public void testSetFileNew() throws IOException {
+		if(f.exists()) {
+			//assertTrue(f.exists());
+			assertTrue(f.delete());
+		}
+		
 		assertFalse(f.exists());
 		Authentifi.setFile(dir);
-		assertEquals("create login file" + System.getProperty("line.separator"), outContent.toString());
+		assertTrue(f.exists());
 	}
 
 	@Test
 	public void testUserAusgeben() throws IOException {
+		String user = "user";
+		String pw = "pw";
+		
 		FileWriter fwOb = new FileWriter(f);
 		PrintWriter pwOb = new PrintWriter(fwOb);
 		pwOb.flush();
@@ -50,16 +65,23 @@ public class TestAuthentifi2 {
 		fwOb.close();
 
 		PrintStream fileStream = new PrintStream(f);
-		fileStream.println("user");
-		fileStream.println("pw");
+		fileStream.println(user);
+		fileStream.println(pw);
 		fileStream.close();
 
 		Authentifi.setFile(dir);
-		Authentifi.userAusgeben();
-		String erwartet = "user: user" + System.getProperty("line.separator") + "password: pw"
-				+ System.getProperty("line.separator");
-		String ausgabe = outContent.toString();
-		assertEquals(erwartet, ausgabe);
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		
+		String line;
+		while((line = br.readLine()) != null) {
+			if(line.equals(user)) {
+				assertEquals(pw, br.readLine());
+			} else {
+				fail("falscher Username");
+			}
+		}
+		br.close();
 	}
 	
 	@Test
@@ -68,6 +90,29 @@ public class TestAuthentifi2 {
 		Authentifi.rmAllUser();
 		Authentifi.userAusgeben();
 		assertEquals("", outContent.toString());
+	}
+	
+	@Test
+	public void testRmUserGood() throws IOException {
+		Authentifi.setFile(dir);
+		String user = "UserToRemove";
+		String pw = "pass";
+
+		//Benutzer anlegen und sichergehen, dass er existiert
+		assertEquals("Benutzer " + user + " erfolgreich angelegt!", Authentifi.newUser(user, pw));
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		
+		String line;
+		while((line = br.readLine()) != null) {
+			if(line.equals(user)) {
+				assertEquals(pw, br.readLine());
+			}
+		}
+		br.close();
+		fr.close();
+		
+		assertEquals("Benutzer " + user + " wurde erfolgreich entfernt!", Authentifi.rmUser(user));
 	}
 	
 }

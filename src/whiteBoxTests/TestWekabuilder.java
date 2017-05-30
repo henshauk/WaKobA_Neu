@@ -84,17 +84,4 @@ public class TestWekabuilder {
         // Kontrolle TBD
     }
 
-    @Test
-    public void testBuildEM() throws Exception {
-        w.filter(filterArr);
-        w.buildEM(5);
-        // Kontrolle TBD
-}
-
-    @Ignore
-    public void testAddKatToDiagrammData() {
-        int[] arr = {12, 14, 16};
-        Wekabuilder.addKatToDiagrammData(arr);
-        // Kontrolle TBD
-    }
 }
