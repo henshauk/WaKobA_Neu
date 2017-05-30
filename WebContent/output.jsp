@@ -9,20 +9,9 @@
 			response.sendRedirect("login.html");
 		}
 	} catch (Exception e) {
-		System.out.println("----- berechtigt Exception ------");
 		response.sendRedirect("login.html");
+		return;
 	}
-	//  für die upload Seite
-	StringBuffer auswertungen = new StringBuffer();
-	List<String> stored = new ArrayList<String>();
-	stored = Wekabuilder.resultNames;
-
-	for (String name : stored) {
-		if (!name.equals("dummy")) {
-			auswertungen.append("<li><a href=output.jsp?store=" + name + ">" + name + "</a></li>");
-		}
-	}
-	//
 
 	List<List<String>> data = new LinkedList<List<String>>();
 	Enumeration<String> param = request.getParameterNames();
@@ -170,20 +159,30 @@
 </head>
 
 <body>
-	<h4 align=center>Ergebnis der Analyse</h4>
-
-
+	
 	<div class="grid">
-
-		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#grafik">Grafik</a></li>
-			<li><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
-			<li>
-				<form action=AuthentificationServlet method=GET>
-					<button type="submit" value="Submit">Logout</button>
-				</form>
-			</li>
-		</ul>
+	<header>
+		<h3>Ergebnis der Analyse</h3><hr />
+	</header>
+		<table>
+			<tr>
+				<td>
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#grafik">Grafik</a></li>
+						<li><a data-toggle="tab" href="#tabelle">Tabelle</a></li>
+					</ul>
+				</td>
+				<td align=right></td>
+				<td><ul class="nav nav-tabs">
+						<li><form action=upload.jsp>
+								<button type="submit" value="Submit">Neue Analyse</button>
+							</form></li>
+						<li><form action=AuthentificationServlet method=GET>
+								<button type="submit" value="Submit">Logout</button>
+							</form></li>
+					</ul></td>
+			</tr>
+		</table>
 
 		<div class="tab-content">
 			<div id="grafik" class="tab-pane fade in active">
@@ -201,7 +200,6 @@
 						<%=table.toString()%>
 					</tbody>
 				</table>
-				<%=auswertungen.toString()%>
 			</div>
 		</div>
 	</div>

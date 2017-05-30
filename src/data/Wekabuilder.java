@@ -55,6 +55,19 @@ public class Wekabuilder {
 										 "Milchprodukte","Backwaren","Obst/Gemüse","Spirituosen","Tiernahrung",
 										 "Bier","Frischfleisch","Drogerieartikel","Konserven","Kaffee/Tee","Süßigkeiten"};
 	
+	public Wekabuilder(String dataDir){
+		storeDir = dataDir + File.separator + "store";
+		File store = new File (storeDir);
+		if (!store.exists()) {
+			store.mkdir();
+		}
+		System.out.println("konstr.2 --");
+		resultNames = new ArrayList<String>();
+		builtList();
+		System.out.println("Liste: "+resultNames.size());
+		
+	}
+	
 	public Wekabuilder(String file, String dataDir) throws Exception {
 		// CSV-Datei laden
 		storeDir = dataDir + File.separator + "store";

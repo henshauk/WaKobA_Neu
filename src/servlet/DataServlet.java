@@ -88,6 +88,7 @@ public class DataServlet extends HttpServlet {
 			try {
 				List<FileItem> items = upload.parseRequest(request);
 				Iterator<FileItem> iter = items.iterator();
+				long sizeInBytes = 0;
 				while (iter.hasNext()) {
 					FileItem item = iter.next();
 
@@ -95,7 +96,7 @@ public class DataServlet extends HttpServlet {
 						if (item.getSize() != 0) {
 
 							String fileName = item.getName();
-							long sizeInBytes = item.getSize();
+							sizeInBytes = item.getSize();
 							System.out.println(fileName + " size:" + sizeInBytes);
 
 							Date d = new Date();
@@ -127,6 +128,7 @@ public class DataServlet extends HttpServlet {
 					// System.out.println("input " + item.getFieldName());				 
 				}
 				
+				if(sizeInBytes > 0){
 				Wekabuilder wb = new Wekabuilder(filePath, servletPath);
 				
 				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()])); 
@@ -147,15 +149,14 @@ public class DataServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 				 }
-				 else if(algorithmus.equals("c")){
-					 try {
-							wb.buildEM(anzahlCluster);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-				 }
 				 
 				 clearFiles(repository);
+				}
+				else {
+					response.sendRedirect("upload.jsp");
+					return;
+				}
+					
 				 
 			} catch (FileUploadException e) {
 				// TODO Auto-generated catch block

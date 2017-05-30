@@ -67,7 +67,7 @@ public class AuthentificationServlet extends HttpServlet {
         
         if(login==true){
             System.out.println("Welcome user");
-            response.sendRedirect("upload.html");
+            response.sendRedirect("upload.jsp");
         }
         else if(login == false){
         	response.sendRedirect("login.html");
