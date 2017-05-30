@@ -15,7 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class TestAuthentifi2 {
+public class TestAuthentifi3 {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private File f;
@@ -34,40 +34,23 @@ public class TestAuthentifi2 {
 	}
 
 	@Test
-	public void testSetFileNew() {
-		f.delete();
-		assertFalse(f.exists());
+	public void testValidGood() throws IOException {
+		// testet den Login mit gültigen Daten
 		Authentifi.setFile(dir);
-		assertEquals("create login file" + System.getProperty("line.separator"), outContent.toString());
-	}
 
-	@Test
-	public void testUserAusgeben() throws IOException {
-		FileWriter fwOb = new FileWriter(f);
-		PrintWriter pwOb = new PrintWriter(fwOb);
-		pwOb.flush();
-		pwOb.close();
-		fwOb.close();
-
+		String user = "user2";
+		String pass = "pw";
+		//Authentifi.newUser(user, pass);
+		
 		PrintStream fileStream = new PrintStream(f);
 		fileStream.println("user");
 		fileStream.println("pw");
+		fileStream.println(user);
+		fileStream.println(pass);
 		fileStream.close();
-
-		Authentifi.setFile(dir);
-		Authentifi.userAusgeben();
-		String erwartet = "user: user" + System.getProperty("line.separator") + "password: pw"
-				+ System.getProperty("line.separator");
-		String ausgabe = outContent.toString();
-		assertEquals(erwartet, ausgabe);
+		
+		boolean accessGranted = false;
+		accessGranted = Authentifi.valid(user, pass);
+		assertTrue(accessGranted);
 	}
-	
-	@Test
-	public void testRmAllUser() throws IOException {
-		Authentifi.setFile(dir);
-		Authentifi.rmAllUser();
-		Authentifi.userAusgeben();
-		assertEquals("", outContent.toString());
-	}
-	
 }

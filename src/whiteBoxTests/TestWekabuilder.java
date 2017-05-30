@@ -21,21 +21,16 @@ import static org.junit.Assert.*;
 public class TestWekabuilder {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private String path = "C:\\Users\\Henning\\Desktop\\Uni\\Softwareprojektmanagement\\Weka Daten\\SPM_TestdatensatzMittel_2017.csv";
+    private String path = "C:\\Users\\Henning\\Desktop\\Uni\\Softwareprojektmanagement\\Weka Daten\\SPM_TestdatensatzGross_2017.csv";
     private String dataDir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
     //private String storeDir = dataDir + File.separator + "store";
     private int[] filterArr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 15};
     private Wekabuilder w;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         System.setOut(new PrintStream(outContent));
-
-        try {
-            w = new Wekabuilder(path, dataDir);
-        } catch (Exception e) {
-            fail("Exception beim setUp ist aufgetreten!");
-        }
+        w = new Wekabuilder(path, dataDir);
     }
 
     @After
@@ -54,7 +49,7 @@ public class TestWekabuilder {
     }
 
     @Test
-    public void testStoreResult() {
+    public void testStoreResult() throws IOException {
         // Die Klasse Result wurde bereits erfolgreich getestet, kann hier also
         // genutzt werden.
         List<List<String>> testdata = new ArrayList<List<String>>();
@@ -70,49 +65,33 @@ public class TestWekabuilder {
 
         Result r = new Result(testdata);
 
-        try {
-            String storedata = w.storeResult(r);
-            result = Wekabuilder.getStoredData(storedata);
-            assertEquals(testdata, result);
-        } catch (IOException e) {
-            fail("IOException ist aufgetreten!");
-        }
+        String storedata = w.storeResult(r);
+        result = Wekabuilder.getStoredData(storedata);
+        assertEquals(testdata, result);
     }
 
     @Test
-    public void testBuildSKM() {
-        try {
-            w.filter(filterArr);
-            w.buildSKM(3);
-            // Kontrolle TBD
-        } catch (Exception e) {
-            fail("Exception ist aufgetreten!");
-        }
+    public void testBuildSKM() throws Exception {
+        w.filter(filterArr);
+        w.buildSKM(3);
+        // Kontrolle TBD
     }
 
     @Test
-    public void testBuildFF() {
-        try {
-            w.filter(filterArr);
-            w.buildFF(4);
-            // Kontrolle TBD
-        } catch (Exception e) {
-            fail("Exception ist aufgetreten!");
-        }
+    public void testBuildFF() throws Exception {
+        w.filter(filterArr);
+        w.buildFF(4);
+        // Kontrolle TBD
     }
 
     @Test
-    public void testBuildEM() {
-        try {
-            w.filter(filterArr);
-            w.buildEM(5);
-            // Kontrolle TBD
-        } catch (Exception e) {
-            fail("Exception ist aufgetreten!");
-        }
-    }
+    public void testBuildEM() throws Exception {
+        w.filter(filterArr);
+        w.buildEM(5);
+        // Kontrolle TBD
+}
 
-    @Test
+    @Ignore
     public void testAddKatToDiagrammData() {
         int[] arr = {12, 14, 16};
         Wekabuilder.addKatToDiagrammData(arr);
