@@ -67,10 +67,9 @@ public class Wekabuilder {
 		if (!store.exists()) {
 			store.mkdir();
 		}
-		System.out.println("konstr.2 --");
 		resultNames = new ArrayList<String>();
 		builtList();
-		System.out.println("Liste: "+resultNames.size());
+//		System.out.println("Liste: "+resultNames.size());
 		
 	}
 	
@@ -232,7 +231,6 @@ public class Wekabuilder {
 		List<List<String>> res = new ArrayList<List<String>>();		//Liste aus Clustern
 		
 		for(int i = 0; i < inst.numInstances(); i++){
-		   System.out.println("Cluster:" + i + "\n");
 		   cluster = inst.get(i).toString();			//to String aus Cluster Instanz
 		   attr =  Arrays.asList(cluster.split("\\s*,\\s*"));	
 		   res.add(attr);						//Cluster der ClusterListe hinzufügen

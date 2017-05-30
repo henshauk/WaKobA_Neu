@@ -68,9 +68,6 @@
 							method=GET>
 							<button type="submit" value="Submit">Logout</button>
 						</form>
-						<form action=Daten.html>
-							<button type="submit" value="Submit">Eingabe</button>
-						</form></td>
 				</tr>
 			</table>
 		</div>

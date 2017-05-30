@@ -98,13 +98,12 @@ public class DataServlet extends HttpServlet {
 
 							String fileName = item.getName();
 							sizeInBytes = item.getSize();
-							System.out.println(fileName + " size:" + sizeInBytes);
-
+					
 							Date d = new Date();
 							SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
 							filePath = uploadPath + File.separator + ft.format(d) + "__" + fileName;
 							File storeFile = new File(filePath);
-							System.out.println("Upload " + filePath);
+					//		System.out.println("Upload " + filePath);
 
 							// datei wird hochgeladen
 							item.write(storeFile);
@@ -114,12 +113,9 @@ public class DataServlet extends HttpServlet {
 						String name = item.getFieldName();
 						if (name.equals("radio")) {
 							algorithmus = item.getString();
-							System.out.println("algorithmus " + algorithmus);
-
 						}
 						if (name.equals("anzahl")) {
 							anzahlCluster= Integer.parseInt(item.getString());
-							System.out.println("anzahl: " + anzahlCluster);
 						}
 						if (name.equals("kategorie")) {						
 							kategorien.add(Integer.parseInt(item.getString()));		//add number if checkbox checked				
@@ -132,7 +128,7 @@ public class DataServlet extends HttpServlet {
 				Wekabuilder wb = new Wekabuilder(filePath, servletPath);
 				
 				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()])); 
-				 System.out.println("Kategoriefilter: "+Arrays.toString(kategorienArray));
+			//	 System.out.println("Kategoriefilter: "+Arrays.toString(kategorienArray));
 				 wb.filter(kategorienArray);
 			
 				 if(algorithmus.equals("a")){
@@ -178,8 +174,8 @@ public class DataServlet extends HttpServlet {
 		String[] files = repository.list();
 		 for(String s: files){
 			    File currentFile = new File(repository.getPath(),s);
-			    System.out.println(s);
-			    System.out.println("löschen: "+currentFile.delete());
+			//    System.out.println(s);
+			    currentFile.delete();
 			    
 			}
 	}

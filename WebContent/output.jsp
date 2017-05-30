@@ -58,7 +58,7 @@
 	käuferdaten.add("Einkaufssumme");
 
 	// Pfad
-	System.out.println("JSP-Kontext: " + getServletContext().getRealPath("/WEB-INF"));
+	//System.out.println("JSP-Kontext: " + getServletContext().getRealPath("/WEB-INF"));
 
 	Set<String> lab = new HashSet<String>();
 	lab.add("Studenten");
