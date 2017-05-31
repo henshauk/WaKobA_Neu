@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*"%>
-<%@ page import="data.Wekabuilder"%>
-<%@ page import="data.Authentifi"%>
+<%@ page import="data.*"%>
+
 <%
 	try {
 		if (!Authentifi.berechtigt.get(request.getSession().getId())) {
@@ -57,20 +57,29 @@
 	käuferdaten.add("Einkaufsuhrzeit");
 	käuferdaten.add("Einkaufssumme");
 
-	// Pfad
-	System.out.println("JSP-Kontext: " + getServletContext().getRealPath("/WEB-INF"));
+	// ------------------------------- dropdrown anfang
 
-	Set<String> lab = new HashSet<String>();
-	lab.add("Studenten");
-	lab.add("Rentner");
-	lab.add("Hausfrauen");
-	Iterator<String> labels = lab.iterator();
-	StringBuffer label = new StringBuffer(); //  create content for Label dropdown
+	Label l = new Label(getServletContext().getRealPath("/WEB-INF"));
+	List<String> dropdown = new LinkedList<String>();
+	dropdown = l.getLabelList();		
+	Iterator<String> label_it = dropdown.iterator();
+	
+	StringBuffer label = new StringBuffer(); //  erstelle Inhalt für label dropdown
 	int j = 0;
-	while (labels.hasNext()) {
-		label.append("<option value=" + (++j) + ">" + labels.next() + "</option>");
+	while (label_it.hasNext()) {
+		label.append("<option value=" + (++j) + ">" + label_it.next() + "</option>");
+	}
+	dropdown = l.getMarketingList();
+	Iterator<String> marketing_it = dropdown.iterator();
+	
+	StringBuffer marketing = new StringBuffer(); //  erstelle Inhalt für marketing dropdown
+	j = 0;
+	while (marketing_it.hasNext()) {
+		marketing.append("<option value=" + (++j) + ">" + marketing_it.next() + "</option>");
 	}
 
+	// ------------------------------- dropdrown ende
+	
 	StringBuffer sB = new StringBuffer(); //  erstellen des Diagramms
 	StringBuffer sB1; //  erstellen der tabelle
 
@@ -112,10 +121,10 @@
 				} else {
 					sB1.append("<li></li><li> <select id=label>" //  Dropbox für Label
 							+ "<option value=0>Auswahl</option>" + label
-							+ "</select><label for=label>--Label</label></li>");
+							+ "</select><label for=label>-- Label</label></li>");
 					sB1.append("<li> <select id=marketing>" //  Dropbox für Marketingvorschläge
-							+ "<option value=0>Auswahl</option>" + label
-							+ "</select><label for=marketing>--Marketing</label></li></ul></td><td></td></tr><tr></tr>");
+							+ "<option value=0>Auswahl</option>" + marketing
+							+ "</select><label for=marketing>-- Marketingvorschläge</label></li></ul></td><td></td></tr><tr></tr>");
 				}
 			}
 

@@ -1,12 +1,15 @@
 package servlet;
 
 import data.Authentifi;
+import data.Label;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,7 +29,7 @@ import org.apache.commons.lang.ArrayUtils;
 import data.Wekabuilder;
 
 /**
- * Verarbeiten der Upload Daten und starten des Weka Algorithmus 
+ * Verarbeiten der Upload Daten und starten des Weka Algorithmus
  * 
  * Servlet implementation class DataServlet
  */
@@ -34,7 +37,7 @@ import data.Wekabuilder;
 public class DataServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String UPLOAD_DIRECTORY = "upload";
-	
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -49,12 +52,41 @@ public class DataServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("--------------dataserv");
+		Enumeration<String> en = request.getParameterNames();
+		while (en.hasMoreElements()) {
+			System.out.println(en.nextElement());
+		}
+		en = request.getParameterNames();
+		if (en.hasMoreElements()) {
+			while (en.hasMoreElements()) {
+				System.out.println("------ if");
+				String str = en.nextElement();
+				Label lab = new Label(getServletContext().getRealPath("/WEB-INF"));
+				if (str.equals("label")) {
+					System.out.println("----label");
+					str = request.getParameter("label");
+					if (str.length() > 0) {
+						System.out.println("label:----" + str);
+						lab.save(str, true);
+					}
+				}
+				if (str.equals("marketing")) {
+					str = request.getParameter("marketing");
+					if (str.length() > 0) {
+						System.out.println("marketing:----" + str);
+						lab.save(str, false);
+					}
+				}
+			}
+			response.sendRedirect("upload.jsp");
 
-		response.sendRedirect("output.jsp");
+		} else
+			response.sendRedirect("output.jsp");
 	}
 
 	/**
-	 *  Verarbeitung der gewünschten Einstellungen inkl. starten Analyse 
+	 * Verarbeitung der gewünschten Einstellungen inkl. starten Analyse
 	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -71,17 +103,18 @@ public class DataServlet extends HttpServlet {
 
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 
-			// ServletPath auslesen und upload Verzeichnis erstellen falls nicht vorhanden
+			// ServletPath auslesen und upload Verzeichnis erstellen falls nicht
+			// vorhanden
 			ServletContext servletContext = this.getServletConfig().getServletContext();
 			String servletPath = servletContext.getRealPath("/WEB-INF");
 			String uploadPath = servletPath + File.separator + UPLOAD_DIRECTORY;
-			File repository = new File (uploadPath);
+			File repository = new File(uploadPath);
 			if (!repository.exists()) {
 				repository.mkdir();
 			}
 			factory.setRepository(repository);
-	
-			//  upload handler erstellen
+
+			// upload handler erstellen
 			ServletFileUpload upload = new ServletFileUpload(factory);
 			String filePath = null;
 
@@ -98,13 +131,12 @@ public class DataServlet extends HttpServlet {
 
 							String fileName = item.getName();
 							sizeInBytes = item.getSize();
-							System.out.println(fileName + " size:" + sizeInBytes);
 
 							Date d = new Date();
 							SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
 							filePath = uploadPath + File.separator + ft.format(d) + "__" + fileName;
 							File storeFile = new File(filePath);
-							System.out.println("Upload " + filePath);
+							// System.out.println("Upload " + filePath);
 
 							// datei wird hochgeladen
 							item.write(storeFile);
@@ -114,50 +146,49 @@ public class DataServlet extends HttpServlet {
 						String name = item.getFieldName();
 						if (name.equals("radio")) {
 							algorithmus = item.getString();
-							System.out.println("algorithmus " + algorithmus);
-
 						}
 						if (name.equals("anzahl")) {
-							anzahlCluster= Integer.parseInt(item.getString());
-							System.out.println("anzahl: " + anzahlCluster);
+							anzahlCluster = Integer.parseInt(item.getString());
 						}
-						if (name.equals("kategorie")) {						
-							kategorien.add(Integer.parseInt(item.getString()));		//add number if checkbox checked				
+						if (name.equals("kategorie")) {
+							kategorien.add(Integer.parseInt(item.getString())); // add
+																				// number
+																				// if
+																				// checkbox
+																				// checked
 						}
 					}
 
 				}
-				
-				if(sizeInBytes > 0){
-				Wekabuilder wb = new Wekabuilder(filePath, servletPath);
-				
-				 int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()])); 
-				 System.out.println("Kategoriefilter: "+Arrays.toString(kategorienArray));
-				 wb.filter(kategorienArray);
-			
-				 if(algorithmus.equals("a")){
-					 try {
+
+				if (sizeInBytes > 0) {
+					Wekabuilder wb = new Wekabuilder(filePath, servletPath);
+
+					int[] kategorienArray = ArrayUtils.toPrimitive(kategorien.toArray(new Integer[kategorien.size()]));
+					// System.out.println("Kategoriefilter:
+					// "+Arrays.toString(kategorienArray));
+					wb.filter(kategorienArray);
+
+					if (algorithmus.equals("a")) {
+						try {
 							wb.buildSKM(anzahlCluster);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-				 }
-				 else if(algorithmus.equals("b")){
-					 try {
+					} else if (algorithmus.equals("b")) {
+						try {
 							wb.buildFF(anzahlCluster);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-				 }
-				 
-				 clearFiles(repository);
-				}
-				else {
+					}
+
+					clearFiles(repository);
+				} else {
 					response.sendRedirect("upload.jsp");
 					return;
 				}
-					
-				 
+
 			} catch (FileUploadException e) {
 				System.err.println("parse Request failed");
 				e.printStackTrace();
@@ -168,20 +199,21 @@ public class DataServlet extends HttpServlet {
 
 		doGet(request, response);
 	}
-	
+
 	/**
-	 *  Löschen der Upload-Dateien nachdem dass Ergebnis vorliegt
+	 * Löschen der Upload-Dateien nachdem dass Ergebnis vorliegt
 	 * 
-	 * @param repository  - upload Verzeichnis
+	 * @param repository
+	 *            - upload Verzeichnis
 	 */
-	private void clearFiles(File repository){
+	private void clearFiles(File repository) {
 		String[] files = repository.list();
-		 for(String s: files){
-			    File currentFile = new File(repository.getPath(),s);
-			    System.out.println(s);
-			    System.out.println("löschen: "+currentFile.delete());
-			    
-			}
+		for (String s : files) {
+			File currentFile = new File(repository.getPath(), s);
+			// System.out.println(s);
+			currentFile.delete();
+
+		}
 	}
 
 }

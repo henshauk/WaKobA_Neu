@@ -68,9 +68,6 @@
 							method=GET>
 							<button type="submit" value="Submit">Logout</button>
 						</form>
-						<form action=Daten.html>
-							<button type="submit" value="Submit">Eingabe</button>
-						</form></td>
 				</tr>
 			</table>
 		</div>
@@ -80,6 +77,7 @@
 			<ul class="tabs left">
 				<li><a href="#new">Neue Analyse</a></li>
 				<li><a href="#last">Letzte Auswertungen</a></li>
+				<li><a href="#daten">Daten einpflegen</a></li>
 			</ul>
 
 			<div id="new" class="tab-content">
@@ -166,6 +164,50 @@
 						<%=auswertungen.toString()%>
 					</ol>
 				</form>
+			</div>
+			<div id="daten" class="tab-content">
+				<table border=1>
+					<tr>
+						<td>
+							<form action="AuthentifikationServlet" method="GET"
+								enctype="text/html">
+								<table align="center">
+									<tr>
+										<td><label for="user">Benutzername:</label>
+										<td><input type="text" name="user"></input>
+									</tr>
+									<tr>
+										<td><label for="pass">Passwort:</label>
+										<td><input type="password" name="pass"></input>
+										<td><input type="submit" value="Speichern">
+									</tr>
+								</table>
+							</form>
+						</td>
+					</tr><tr></tr>
+					<tr>
+						<td><form action="DataServlet" method="GET"
+								enctype="text/html">
+								<table align="center">
+
+									<tr></tr>
+									<tr>
+										<td><label for="label">Label:</label>
+										<td><input type="text" name="label"></input>
+										<td><input type="submit" value="Speichern">
+									</tr>
+									<tr></tr>
+									<tr>
+										<td><label for="marketing">Marketingvorschlag</label>
+										<td><input type="text" name="marketing"></input>
+										<td><input type="submit" value="Speichern">
+									</tr>
+								</table>
+
+
+							</form></td>
+					</tr>
+				</table>
 			</div>
 			<!-- Tabs Left End -->
 

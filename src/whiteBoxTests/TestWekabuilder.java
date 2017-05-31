@@ -39,19 +39,16 @@ public class TestWekabuilder {
     }
 
     @Test
-    public void testFilter() {
-        try {
-            w.filter(filterArr);
-            // Kontrolle TBD
-        } catch (Exception e) {
-            fail("Exception ist aufgetreten!");
-        }
+    public void testFilter() throws Exception {
+        // testet nur auf Fehler, genauere Betrachtung der Funktionalität im Integrations-Test
+    	w.filter(filterArr);
     }
 
     @Test
     public void testStoreResult() throws IOException {
         // Die Klasse Result wurde bereits erfolgreich getestet, kann hier also
         // genutzt werden.
+    	
         List<List<String>> testdata = new ArrayList<List<String>>();
         List<List<String>> result = new ArrayList<List<String>>();
         List<String> simple = new ArrayList<String>();
@@ -64,37 +61,25 @@ public class TestWekabuilder {
         testdata.add(simple);
 
         Result r = new Result(testdata);
-
         String storedata = w.storeResult(r);
-        result = Wekabuilder.getStoredData(storedata);
+        
+        File datafile = new File(storedata);
+        result = Wekabuilder.getStoredData(datafile.getName());
         assertEquals(testdata, result);
     }
 
     @Test
     public void testBuildSKM() throws Exception {
-        w.filter(filterArr);
+        // testet nur auf Fehler, genauere Betrachtung im Integrations-Test
+    	w.filter(filterArr);
         w.buildSKM(3);
-        // Kontrolle TBD
     }
 
     @Test
     public void testBuildFF() throws Exception {
-        w.filter(filterArr);
+    	// testet nur auf Fehler, genauere Betrachtung im Integrations-Test
+    	w.filter(filterArr);
         w.buildFF(4);
-        // Kontrolle TBD
     }
 
-    @Test
-    public void testBuildEM() throws Exception {
-        w.filter(filterArr);
-        w.buildEM(5);
-        // Kontrolle TBD
-}
-
-    @Ignore
-    public void testAddKatToDiagrammData() {
-        int[] arr = {12, 14, 16};
-        Wekabuilder.addKatToDiagrammData(arr);
-        // Kontrolle TBD
-    }
 }

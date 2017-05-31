@@ -2,13 +2,16 @@ package whiteBoxTests;
 
 import data.Authentifi;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,8 +25,10 @@ public class TestAuthentifi {
 
 	private File f;
 
-	private String dir = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF";
-	private String file = "C:\\Users\\Henning\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\WaKobA\\WEB-INF\\login.txt";
+	private String path = new File(".").getAbsolutePath();
+	
+	private String dir = path + File.separator + "WebContent" + File.separator + "WEB-INF";
+	private String file = dir + File.separator + "login.txt";
 
 	@Before
 	public void setUp() throws IOException {
@@ -45,7 +50,7 @@ public class TestAuthentifi {
 	public void cleanUp() {
 		System.setOut(null);
 
-		f.delete();
+		//f.delete();
 	}
 
 	/*
@@ -116,7 +121,7 @@ public class TestAuthentifi {
 		
 		Authentifi.newUser(user, pw);
 		String output = Authentifi.newUser(user, pw);
-		assertEquals(output, "Benutzer " + user + " konnte nicht angelegt werden! (Bereits vorhanden (newUser) )");
+		assertEquals("Benutzer " + user + " konnte nicht angelegt werden! (Bereits vorhanden (newUser) )", output);
 }
 
 	@Test
@@ -125,11 +130,21 @@ public class TestAuthentifi {
 		String user = "UserToRemove";
 		String pw = "pass";
 
+		//Benutzer anlegen und sichergehen, dass er existiert
 		assertEquals("Benutzer " + user + " erfolgreich angelegt!", Authentifi.newUser(user, pw));
-		Authentifi.userAusgeben();
-		assertEquals("", outContent);
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
 		
-		//assertEquals("Benutzer " + user + " wurde erfolgreich entfernt!", Authentifi.rmUser(user));
+		String line;
+		while((line = br.readLine()) != null) {
+			if(line.equals(user)) {
+				assertEquals(pw, br.readLine());
+			}
+		}
+		br.close();
+		fr.close();
+		
+		assertEquals("Benutzer " + user + " wurde erfolgreich entfernt!", Authentifi.rmUser(user));
 	}
 
 	@Test
@@ -138,17 +153,4 @@ public class TestAuthentifi {
 		assertEquals("Benutzer " + user + " konnte nicht gelöscht werden (nicht vorhanden)", Authentifi.rmUser(user));
 	}
 
-	@Test
-	public void testDeleteFile() throws IOException {
-		assertTrue(Authentifi.deleteFile(dir));
-		
-		//Datei wiederherstellen, genauso wie es in @Before passiert
-		f.createNewFile();
-
-		PrintStream fileStream = new PrintStream(f);
-		fileStream.println("user");
-		fileStream.println("pw");
-		fileStream.close();
-	}
-	
 }
